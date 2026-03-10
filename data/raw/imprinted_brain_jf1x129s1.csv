@@ -1,0 +1,33 @@
+Gene,Status,Expressed Allele,Strand
+Ube3a,Parental Bias II - Maternal Expression,Maternal,+
+Meg3,Imprinted,Maternal,+
+H19,Parental Bias II,Maternal,-
+Cdkn1c,Imprinted-same,Maternal,-
+Blcap,Imprinted-flipped,Maternal,+
+Asb4,Biallelic,Maternal,+
+Rian,Imprinted,Maternal,+
+Mirg,Parental Bias II,Maternal,+
+Trappc9,Imprinted-flipped,Maternal,-
+Copg2,Imprinted-flipped,Maternal,+
+Grb10,Parental Bias II,Maternal ,-
+Magel2,Imprinted-same,Paternal,+
+Ndn,Imprinted-same,Paternal,+
+Snurf,Imprinted-same,Paternal,-
+Mkrn3,Imprinted-same,Paternal,-
+Peg3,Imprinted-same,Paternal,-
+Nnat,Imprinted-same,Paternal,+
+Dlk1,Imprinted-same,Paternal ,+
+Rtl1,Imprinted,Maternal,+
+Dio3,Biallelic,Paternal,+
+Mest,Imprinted-same,Paternal,+
+Igf2,Biallelic,Paternal,-
+Sgce,Imprinted-same,Paternal,-
+Peg10,Imprinted-same,Paternal,+
+Nap1l5,Imprinted-same,Paternal,-
+Usp29,Parental Bias II,Paternal,+
+Plagl1,Biallelic,Paternal,-
+Peg13,Imprinted-same,Paternal,-
+Zrsr1,N/A,Paternal,
+Impact,Parental Bias II-flipped,Paternal,+
+Zdbf2,Imprinted-same,Paternal,+
+Rasgrf1,Parental Bias II-same,Paternal ,
