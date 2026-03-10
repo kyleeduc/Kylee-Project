@@ -94,7 +94,7 @@ imprinting_analysis <- imprinting_analysis %>%
                       WT_M2_S250_allelic_expression_ratio, 
                       WT_M3_S255_allelic_expression_ratio), na.rm = TRUE),
     WT_Overall_avg = mean(c(WT_F_avg, WT_M_avg), na.rm = TRUE),
-    Imprinting_Pattern = case_when(
+    Expression_Pattern = case_when(
       Expressed_Allele == "Maternal" & WT_Overall_avg >= 0.7 ~ "Matches Maternal",
       Expressed_Allele == "Paternal" & WT_Overall_avg <= -0.7 ~ "Matches Paternal",
       TRUE ~ "Does Not Match"
