@@ -1,0 +1,98 @@
+base_gene_name,5cKO_M1_ImprintStatus,WT_M3_S255_ImprintStatus,5cKO_M2_ImprintStatus,WT_F1_S245_ImprintStatus,5cHT_F1_ImprintStatus,5cHT_F2_ImprintStatus,5cKO_M3_ImprintStatus,WT_M1_S249_ImprintStatus,WT_M2_S250_ImprintStatus,5cHT_F3_ImprintStatus,WT_F2_S252_ImprintStatus,WT_F3_S253_ImprintStatus,Status,Expressed_Allele,source,WT_F_avg,WT_M_avg,WT_Overall_avg,Expression_Pattern,WT_Female_Consistent,WT_Male_Consistent
+Adam23,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted,Paternal,imprinted_gene_list,-0.100424324167302,-0.100775531333747,-0.100599927750524,Does Not Match,Yes,Yes
+Ampd3,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted,Maternal,imprinted_gene_list,-0.101797512335162,0.0437272416538763,-0.0290351353406427,Does Not Match,Yes,Yes
+Ano1,N,P,N,N,N,N,N,N,N,N,N,N,Imprinted,Maternal,imprinted_gene_list,-0.317260981508663,0.24230227183043,-0.0374793548391163,Does Not Match,Yes,No
+Aqp1,N,N,P,N,N,N,P,N,N,N,P,N,Imprinted,Maternal,imprinted_gene_list,0.384778020268806,0.029176256334874,0.20697713830184,Does Not Match,No,Yes
+Asb4,P,P,P,P,P,P,P,P,P,P,P,P,Biallelic,Maternal,imprinted_brain,1,1,1,Matches Maternal,Yes,Yes
+Ascl2,P,P,P,P,P,P,P,P,P,P,P,P,Imprinted,Maternal,imprinted_gene_list,1,1,1,Matches Maternal,Yes,Yes
+Axl,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted,Maternal,imprinted_gene_list,0.109396984497614,0.0863103438195812,0.0978536641585975,Does Not Match,Yes,Yes
+Begain,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted - Isoform Dependent,Paternal,imprinted_gene_list,-0.421935351315192,-0.272753891880053,-0.347344621597623,Does Not Match,Yes,Yes
+Blcap,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted-flipped,Maternal,imprinted_brain,0.273165115284053,0.170170990052394,0.221668052668224,Does Not Match,Yes,Yes
+Ccdc40,N,N,N,N,N,N,N,N,N,P,N,N,Imprinted,Paternal,imprinted_gene_list,0.131128488761864,0.0228999395666062,0.0770142141642353,Does Not Match,Yes,Yes
+Cd81,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted,Maternal,imprinted_gene_list,0.220054910678164,0.184314114182462,0.202184512430313,Does Not Match,Yes,Yes
+Cdh15,P,M,M,M,M,P,M,P,M,M,M,M,Imprinted,Paternal,imprinted_gene_list,-0.959899749373434,-0.274410367866055,-0.617155058619744,Does Not Match,Yes,No
+Cdkn1c,P,P,P,P,P,P,P,P,P,P,P,P,Imprinted-same,Maternal,imprinted_brain,0.877485368957126,0.890896428792739,0.884190898874933,Matches Maternal,Yes,Yes
+Chrac1,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted,Maternal,imprinted_gene_list,0.0799957968294819,0.110472860472861,0.0952343286511712,Does Not Match,Yes,Yes
+Commd1,P,P,P,P,N,P,P,P,N,P,P,P,Imprinted,Maternal,imprinted_gene_list,1,0.777536231884058,0.888768115942029,Matches Maternal,Yes,No
+Copg2,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted-flipped,Maternal,imprinted_brain,0.069622037423128,0.0343408734434038,0.0519814554332659,Does Not Match,Yes,Yes
+Dact2,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted,Maternal,imprinted_gene_list,-0.00599304863824825,-0.354576770852481,-0.180284909745365,Does Not Match,Yes,Yes
+Dcn,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted,Maternal,imprinted_gene_list,0.242922678407279,0.137302681069137,0.190112679738208,Does Not Match,Yes,Yes
+Ddc,N,P,N,N,N,M,N,N,N,N,N,N,Imprinted,Paternal,imprinted_gene_list,-0.425795259068184,0.063746965767508,-0.181024146650338,Does Not Match,Yes,No
+Dhcr7,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted,Maternal,imprinted_gene_list,-0.109482976274758,-0.103270743987835,-0.106376860131296,Does Not Match,Yes,Yes
+Dio3,N,P,N,N,N,N,N,P,P,P,P,N,Biallelic,Paternal,imprinted_brain,0.43461582503149,1,0.717307912515745,Does Not Match,No,Yes
+Dlk1,M,M,M,M,M,M,M,M,M,P,P,M,Imprinted-same,Paternal,imprinted_brain,-0.333333333333333,-1,-0.666666666666667,Does Not Match,No,Yes
+Ftx,P,P,P,N,N,N,P,P,P,N,N,N,Imprinted,Paternal,imprinted_gene_list,0.110359099058976,0.941360320507785,0.52585970978338,Does Not Match,Yes,Yes
+Gab1,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted,Paternal,imprinted_gene_list,-0.104453307246325,-0.122800703593078,-0.113627005419701,Does Not Match,Yes,Yes
+Galnt6,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted,Paternal,imprinted_gene_list,0.0218629255805007,-0.276303426952419,-0.127220250685959,Does Not Match,Yes,Yes
+Gatm,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted,Maternal,imprinted_gene_list,-0.0408079132672439,-0.0575873116989395,-0.0491976124830917,Does Not Match,Yes,Yes
+Gm35612,P,P,P,P,P,P,P,P,P,P,P,P,Imprinted,Maternal,imprinted_gene_list,0.971014492753623,1,0.985507246376812,Matches Maternal,Yes,Yes
+Gnai3,N,N,N,N,N,N,N,N,N,N,N,N,Predicted,Maternal,imprinted_gene_list,0.0722209723036164,0.123461131065972,0.097841051684794,Does Not Match,Yes,Yes
+Gnas,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted - Isoform Dependent,Maternal,imprinted_gene_list,-0.195843130503909,-0.231549716989878,-0.213696423746894,Does Not Match,Yes,Yes
+Grb10,M,N,M,N,M,M,M,N,M,M,M,N,Parental Bias II,Maternal,imprinted_brain,-0.684832639416312,-0.65356439049692,-0.669198514956616,Does Not Match,No,No
+H13,N,N,M,N,N,N,N,N,M,M,M,N,Imprinted,Maternal,imprinted_gene_list,-0.340050617186623,-0.247184631347402,-0.293617624267012,Does Not Match,No,No
+H19,P,P,P,P,P,P,P,P,P,P,P,P,Parental Bias II,Maternal,imprinted_brain,1,1,1,Matches Maternal,Yes,Yes
+Htr2a,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted,Maternal,imprinted_gene_list,-0.148603166379467,0.103990782075531,-0.0223061921519677,Does Not Match,Yes,Yes
+Hymai,P,P,P,P,M,P,P,P,P,P,P,P,Imprinted,Paternal,imprinted_gene_list,1,1,1,Does Not Match,Yes,Yes
+Igf2,N,N,N,N,N,N,N,N,N,N,N,N,Biallelic,Paternal,imprinted_brain,0.254396372655035,0.185516780550966,0.219956576603,Does Not Match,Yes,Yes
+Igf2r,N,N,N,N,N,N,N,N,N,N,N,N,Tissue Dependent,Maternal,imprinted_gene_list,0.215019414368176,0.101794358843664,0.15840688660592,Does Not Match,Yes,Yes
+Impact,N,N,N,N,N,N,N,N,N,N,N,N,Parental Bias II-flipped,Paternal,imprinted_brain,0.585774489372869,0.581379147533976,0.583576818453423,Does Not Match,Yes,Yes
+Inpp5f,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted,Paternal,imprinted_gene_list,0.117554622247084,-0.0603488333681158,0.0286028944394842,Does Not Match,Yes,Yes
+Jade1,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted,Paternal,imprinted_gene_list,-0.340181654832652,-0.384372593881908,-0.36227712435728,Does Not Match,Yes,Yes
+Jpx,P,P,P,N,N,N,P,P,P,N,N,N,Imprinted,Paternal,imprinted_gene_list,0.312076397201257,1,0.656038198600628,Does Not Match,Yes,Yes
+Kcnk9,P,P,P,P,P,P,P,P,P,P,P,P,Imprinted,Maternal,imprinted_gene_list,0.977569190660208,0.968536501860666,0.973052846260437,Matches Maternal,Yes,Yes
+Kcnq1,P,P,P,P,P,P,P,P,P,P,P,P,Imprinted,Maternal,imprinted_gene_list,1,1,1,Matches Maternal,Yes,Yes
+Kcnq1ot1,M,M,M,M,M,M,M,M,M,M,M,M,Imprinted,Paternal,imprinted_gene_list,-0.975488307603705,-0.999096294240428,-0.987292300922066,Matches Paternal,Yes,Yes
+Klf14,P,P,P,P,P,P,P,P,P,P,P,P,Imprinted,Maternal,imprinted_gene_list,1,1,1,Matches Maternal,Yes,Yes
+Maged2,P,P,P,N,N,N,P,P,P,N,N,N,Imprinted,Maternal,imprinted_gene_list,-0.0278275043883628,1,0.486086247805819,Does Not Match,Yes,Yes
+Magel2,P,P,M,P,M,M,M,P,M,P,P,P,Imprinted-same,Paternal,imprinted_brain,1,0.333333333333333,0.666666666666667,Does Not Match,Yes,No
+Magi2,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted,Paternal,imprinted_gene_list,-0.124941260967359,-0.128433823082016,-0.126687542024687,Does Not Match,Yes,Yes
+Mcts2,N,N,M,N,N,N,N,N,M,M,M,N,Imprinted,Paternal,imprinted_gene_list,-0.593735520341025,-0.519178082191781,-0.556456801266403,Does Not Match,No,No
+Meg3,M,P,M,M,P,P,M,P,M,M,P,M,Imprinted,Maternal,imprinted_brain,-0.309831941613511,0.337425097126587,0.013796577756538,Does Not Match,No,No
+Mest,M,M,M,M,M,M,M,M,M,M,M,M,Imprinted-same,Paternal,imprinted_brain,-0.9579313765873,-0.96890970824935,-0.963420542418325,Matches Paternal,Yes,Yes
+Mirg,M,P,M,M,P,P,M,P,M,M,P,M,Parental Bias II,Maternal,imprinted_brain,-0.30242633472722,0.33446804138088,0.01602085332683,Does Not Match,No,No
+Mkrn3,P,P,P,P,P,P,P,P,P,P,P,P,Imprinted-same,Paternal,imprinted_brain,1,1,1,Does Not Match,Yes,Yes
+Nap1l4,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted,Maternal,imprinted_gene_list,0.0280281782015141,0.126035878778379,0.0770320284899468,Does Not Match,Yes,Yes
+Nap1l5,M,M,M,M,M,M,M,M,M,M,M,M,Imprinted-same,Paternal,imprinted_brain,-1,-0.998577908544808,-0.999288954272404,Matches Paternal,Yes,Yes
+Ndn,M,M,M,M,M,M,M,M,M,M,M,M,Imprinted-same,Paternal,imprinted_brain,-1,-1,-1,Matches Paternal,Yes,Yes
+Nnat,M,M,M,M,M,M,M,M,M,M,M,M,Imprinted-same,Paternal,imprinted_brain,-0.992027443710782,-0.994802266268687,-0.993414854989734,Matches Paternal,Yes,Yes
+Pde10a,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted,Maternal,imprinted_gene_list,-0.259044486719668,-0.195620782260107,-0.227332634489887,Does Not Match,Yes,Yes
+Peg10,M,M,M,M,M,M,M,M,M,M,M,M,Imprinted-same,Paternal,imprinted_brain,-1,-0.986693280106454,-0.993346640053227,Matches Paternal,Yes,Yes
+Peg12,P,P,P,P,P,P,P,P,P,P,P,P,Imprinted,Paternal,imprinted_gene_list,1,1,1,Does Not Match,Yes,Yes
+Peg13,M,M,M,M,M,M,M,M,M,M,M,M,Imprinted-same,Paternal,imprinted_brain,-0.998108866529558,-0.993621541314648,-0.995865203922103,Matches Paternal,Yes,Yes
+Peg3,M,M,M,M,M,M,M,M,M,M,M,M,Imprinted-same,Paternal,imprinted_brain,-0.998914090899098,-0.999192160602739,-0.999053125750919,Matches Paternal,Yes,Yes
+Peg3os,P,P,P,P,P,P,P,P,P,P,P,P,Imprinted,Paternal,imprinted_gene_list,1,1,1,Does Not Match,Yes,Yes
+Plagl1,M,M,M,M,M,M,M,M,M,M,M,M,Biallelic,Paternal,imprinted_brain,-0.938254937854129,-0.94042274456566,-0.939338841209895,Matches Paternal,Yes,Yes
+Pon2,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted,Maternal,imprinted_gene_list,0.27415975501699,0.0300860683290554,0.152122911673023,Does Not Match,Yes,Yes
+Pon3,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted,Maternal,imprinted_gene_list,0.401646920261064,0.378102490352452,0.389874705306758,Does Not Match,Yes,Yes
+Ppp1r9a,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted,Maternal,imprinted_gene_list,-0.0213146609640256,-0.0335096315744502,-0.0274121462692379,Does Not Match,Yes,Yes
+Prkn,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted,Maternal,imprinted_gene_list,-0.303985950732939,-0.212138844195239,-0.258062397464089,Does Not Match,Yes,Yes
+Qpct,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted,Maternal,imprinted_gene_list,-0.0975192645261463,0.0141578507772472,-0.0416807068744495,Does Not Match,Yes,Yes
+Rasgrf1,N,N,N,N,N,N,N,N,N,N,N,N,Parental Bias II-same,Paternal,imprinted_brain,-0.517843188124387,-0.477540916727468,-0.497692052425928,Does Not Match,Yes,Yes
+Rian,M,P,M,M,P,P,M,P,M,M,P,M,Imprinted,Maternal,imprinted_brain,-0.270088926468179,0.345435784650217,0.037673429091019,Does Not Match,No,No
+Rtl1,P,P,P,P,M,P,P,P,P,P,P,P,Imprinted,Maternal,imprinted_brain,1,1,1,Matches Maternal,Yes,Yes
+Sall1,N,N,N,N,N,N,M,M,N,N,N,M,Imprinted,Paternal,imprinted_gene_list,-0.324368443145479,-0.411097187126817,-0.367732815136148,Does Not Match,No,No
+Sfmbt2,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted,Paternal,imprinted_gene_list,-0.167605640855125,-0.0246866346211165,-0.0961461377381208,Does Not Match,Yes,Yes
+Sgce,M,M,M,M,M,M,M,M,M,M,M,M,Imprinted-same,Paternal,imprinted_brain,-0.998405312821806,-0.99944118468846,-0.998923248755133,Matches Paternal,Yes,Yes
+Slc22a18,P,P,P,P,N,P,P,P,P,P,P,P,Imprinted,Maternal,imprinted_gene_list,1,1,1,Matches Maternal,Yes,Yes
+Slc22a2,P,P,P,P,P,P,P,P,P,P,P,P,Imprinted,Maternal,imprinted_gene_list,1,1,1,Matches Maternal,Yes,Yes
+Slc22a3,P,P,P,P,N,P,P,P,P,P,P,P,Imprinted,Maternal,imprinted_gene_list,1,1,1,Matches Maternal,Yes,Yes
+Slc38a4,P,P,P,N,N,N,N,N,N,P,P,N,Imprinted,Paternal,imprinted_gene_list,0.130054644808743,0.259530227185214,0.194792435996978,Does Not Match,No,No
+Smoc1,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted,Paternal,imprinted_gene_list,0.210135500707789,0.324767134818947,0.267451317763368,Does Not Match,Yes,Yes
+Smoc2,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted,Maternal,imprinted_gene_list,0.0843145525750555,0.0358680398434016,0.0600912962092285,Does Not Match,Yes,Yes
+Snrpn,M,M,M,M,M,M,M,M,M,M,M,M,Imprinted,Paternal,imprinted_gene_list,-0.972310464179034,-0.978609625668449,-0.975460044923741,Matches Paternal,Yes,Yes
+Snx14,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted,Paternal,imprinted_gene_list,-0.0324692518997657,-0.18799439952165,-0.110231825710708,Does Not Match,Yes,Yes
+Th,P,P,P,P,N,P,P,P,P,P,P,P,Imprinted,Maternal,imprinted_gene_list,1,1,1,Matches Maternal,Yes,Yes
+Thbs2,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted,Maternal,imprinted_gene_list,-0.224335314239998,-0.0520852185219897,-0.138210266380994,Does Not Match,Yes,Yes
+Tnfrsf22,N,P,N,P,N,P,P,P,N,N,N,P,Imprinted,Maternal,imprinted_gene_list,0.821596244131455,0.769784172661871,0.795690208396663,Matches Maternal,No,No
+Tnfrsf23,P,P,P,P,P,P,P,P,P,P,P,P,Imprinted,Maternal,imprinted_gene_list,1,1,1,Matches Maternal,Yes,Yes
+Trappc9,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted-flipped,Maternal,imprinted_brain,-0.516249975933907,-0.531357736158861,-0.523803856046384,Does Not Match,Yes,Yes
+Tsix,P,P,P,P,P,P,P,P,P,P,P,P,Imprinted,Maternal,imprinted_gene_list,1,1,1,Matches Maternal,Yes,Yes
+Tssc4,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted,Maternal,imprinted_gene_list,0.0339679985697684,0.118749831597077,0.0763589150834225,Does Not Match,Yes,Yes
+Ube3a,N,N,N,N,N,N,N,N,N,N,N,N,Parental Bias II - Maternal Expression,Maternal,imprinted_brain,-0.034933213132568,0.0188619011491342,-0.00803565599171693,Does Not Match,Yes,Yes
+Usp29,M,M,M,M,M,M,M,M,M,M,M,M,Parental Bias II,Paternal,imprinted_brain,-0.839406771684656,-0.837607390815335,-0.838507081249996,Matches Paternal,Yes,Yes
+Xlr3b,P,P,P,P,P,P,P,P,P,P,P,P,Imprinted,Maternal,imprinted_gene_list,0.929824561403509,1,0.964912280701754,Matches Maternal,Yes,Yes
+Zdbf2,M,M,M,M,M,M,M,M,M,M,M,M,Imprinted-same,Paternal,imprinted_brain,-0.997163291623655,-0.998163694089708,-0.997663492856681,Matches Paternal,Yes,Yes
+Zfp64,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted,Paternal,imprinted_gene_list,0.105341703787273,0.127556638945415,0.116449171366344,Does Not Match,Yes,Yes
+Zim1,N,N,N,N,N,N,N,N,N,N,N,N,Imprinted,Maternal,imprinted_gene_list,0.0114314223118803,0.0154719030469331,0.0134516626794067,Does Not Match,Yes,Yes
+Zim3,P,P,P,P,P,P,P,P,P,P,P,P,Imprinted,Maternal,imprinted_gene_list,1,1,1,Matches Maternal,Yes,Yes
+Zrsr1,M,M,M,M,M,M,M,M,M,M,M,M,N/A,Paternal,imprinted_brain,-0.999332933093189,-0.99900363726739,-0.99916828518029,Matches Paternal,Yes,Yes
