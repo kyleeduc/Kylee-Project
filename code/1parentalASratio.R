@@ -55,16 +55,21 @@ expression_wide <- expression_wide %>%
     # If ratio >= 0.7: maternally expressed and paternally imprinted (85%+ maternal)
     # If ratio <= -0.7: paternally expressed and maternally imprinted (85%+ paternal)
     # If -0.7 < ratio < 0.7: Not imprinted (less than 85% bias)
+    # If (maternal + paternal) < 5: N/A (insufficient reads)
     imprinting_status = ifelse(
       is.na(allelic_expression_ratio),
-      "Not Determined",
+      "N/A",
       ifelse(
-        allelic_expression_ratio >= 0.7,
-        "Paternally Imprinted",
+        (maternal + paternal) < 5,
+        "N/A",
         ifelse(
-          allelic_expression_ratio <= -0.7,
-          "Maternally Imprinted",
-          "Not Imprinted"
+          allelic_expression_ratio >= 0.7,
+          "Paternally Imprinted",
+          ifelse(
+            allelic_expression_ratio <= -0.7,
+            "Maternally Imprinted",
+            "Biallelic"
+          )
         )
       )
     )
@@ -78,6 +83,14 @@ results_final <- expression_wide %>%
     values_from = c(allelic_expression_ratio, imprinting_status),
     names_glue = "{sample}_{.value}"
   )
+
+# Rename the columns for clarity and readability
+colnames(results_final) <- c("Gene_Name", "KO_M1_AER", "WT_M3_AER", "KO_M2_AER", "WT_F1_AER",
+                             "HT_F1_AER", "HT_F2_AER", "KO_M3_AER", "WT_M1_AER", "WT_M2_AER",
+                             "HT_F3_AER", "WT_F2_AER", "WT_F3_AER", "KO_M1_ImprintStatus", "WT_M3_ImprintStatus",
+                             "KO_M2_ImprintStatus", "WT_F1_ImprintStatus", "HT_F1_ImprintStatus", "HT_F2_ImprintStatus",
+                             "KO_M3_ImprintStatus", "WT_M1_ImprintStatus", "WT_M2_ImprintStatus", "HT_F3_ImprintStatus",
+                             "WT_F2_ImprintStatus", "WT_F3_ImprintStatus")
 
 # Step 5: View results
 head(results_final)
