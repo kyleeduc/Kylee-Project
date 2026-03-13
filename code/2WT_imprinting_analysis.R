@@ -66,8 +66,8 @@ imprinting_analysis <- imprinting_analysis %>%
 # If Maternally_Imprinted_Mice_Count is equal to Imprinted_Mice_Count, then create a column called "Overall_Imprinting_Status" and set it to "Maternally Imprinted". If Paternally_Imprinted_Mice_Count is equal to Imprinted_Mice_Count, then set "Overall_Imprinting_Status" to "Paternally Imprinted". If neither of these conditions are met, set "Overall_Imprinting_Status" to "Inconsistent Imprinting".
 imprinting_analysis <- imprinting_analysis %>%
   mutate(Overall_Expression_Status = case_when(
-    Maternally_Imprinted_Mice_Count == Imprinted_Mice_Count & Imprinted_Mice_Count > 0 ~ "Maternal",
-    Paternally_Imprinted_Mice_Count == Imprinted_Mice_Count & Imprinted_Mice_Count > 0 ~ "Paternal",
+    Maternally_Imprinted_Mice_Count == Imprinted_Mice_Count & Imprinted_Mice_Count > 0 ~ "Paternal",
+    Paternally_Imprinted_Mice_Count == Imprinted_Mice_Count & Imprinted_Mice_Count > 0 ~ "Maternal",
     Imprinted_Mice_Count == 0 ~ "Not Imprinted",
     TRUE ~ "Inconsistent"
   ))
