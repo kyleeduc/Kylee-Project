@@ -22,7 +22,7 @@ hip_rna_ase <- read_csv("data/processed/HIP_RNA-AlSp_parentalASE.csv")
 hip_rna_ase <- hip_rna_ase[rowSums(is.na(hip_rna_ase)) != 12, ]
 
 # If a row contains 12 "Not Imprinted" strings, then delete the full row
-hip_rna_ase <- hip_rna_ase[rowSums(hip_rna_ase == "Not Imprinted", na.rm = TRUE) != 12, ]
+hip_rna_ase <- hip_rna_ase[rowSums(hip_rna_ase == "N/A", na.rm = TRUE) != 12, ]
 
 # Create a new column that categorizes imprinting
 hip_rna_ase <- hip_rna_ase %>%
@@ -31,29 +31,29 @@ hip_rna_ase <- hip_rna_ase %>%
       # Check all imprinting_status columns for M, P, or N
       
       # Both M and P found
-      (rowSums(across(ends_with("_imprinting_status"), ~. == "Maternally Imprinted"), na.rm = TRUE) > 0) &
-        (rowSums(across(ends_with("_imprinting_status"), ~. == "Paternally Imprinted"), na.rm = TRUE) > 0) ~ "M&P",
+      (rowSums(across(ends_with("_ImprintStatus"), ~. == "Maternally Imprinted"), na.rm = TRUE) > 0) &
+        (rowSums(across(ends_with("_ImprintStatus"), ~. == "Paternally Imprinted"), na.rm = TRUE) > 0) ~ "M&P",
       
       # Only M found
-      (rowSums(across(ends_with("_imprinting_status"), ~. == "Maternally Imprinted"), na.rm = TRUE) > 0) &
-        (rowSums(across(ends_with("_imprinting_status"), ~. == "Paternally Imprinted"), na.rm = TRUE) == 0) ~ "M",
+      (rowSums(across(ends_with("_ImprintStatus"), ~. == "Maternally Imprinted"), na.rm = TRUE) > 0) &
+        (rowSums(across(ends_with("_ImprintStatus"), ~. == "Paternally Imprinted"), na.rm = TRUE) == 0) ~ "M",
       
       # Only P found
-      (rowSums(across(ends_with("_imprinting_status"), ~. == "Paternally Imprinted"), na.rm = TRUE) > 0) &
-        (rowSums(across(ends_with("_imprinting_status"), ~. == "Maternally Imprinted"), na.rm = TRUE) == 0) ~ "P",
+      (rowSums(across(ends_with("_ImprintStatus"), ~. == "Paternally Imprinted"), na.rm = TRUE) > 0) &
+        (rowSums(across(ends_with("_ImprintStatus"), ~. == "Maternally Imprinted"), na.rm = TRUE) == 0) ~ "P",
       
-      # Not imprinted (all are "Not Imprinted")
-      (rowSums(across(ends_with("_imprinting_status"), ~. == "Not Imprinted"), na.rm = TRUE) > 0) &
-        (rowSums(across(ends_with("_imprinting_status"), ~. != "Not Imprinted"), na.rm = TRUE) == 0) ~ "N",
+      # Not imprinted (all are "Biallelic" or "N/A")
+      (rowSums(across(ends_with("_ImprintStatus"), ~. == "Biallelic" | . == "N/A"), na.rm = TRUE) > 0) &
+        (rowSums(across(ends_with("_ImprintStatus"), ~. != "Biallelic" & . != "N/A"), na.rm = TRUE) == 0) ~ "N",
       
       .default = "Unknown"
     )
   )
 
 # View the results
-print(hip_rna_ase %>% select(base_gene_name, Imprinting_Category) %>% head(20))
+print(hip_rna_ase %>% select(Gene_Name, Imprinting_Category) %>% head(20))
 
 # Save the results to a new CSV file
 hip_rna_ase %>%
-  select(base_gene_name, Imprinting_Category) %>%
+  select(Gene_Name, Imprinting_Category) %>%
   write_csv("data/processed/HIP_RNA-mouse_imprinted_genes.csv")
