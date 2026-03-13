@@ -54,11 +54,11 @@ imprinting_analysis_clean <- imprinting_analysis_clean %>%
 
 # Calculate the percent of imprinted mice that are maternally imprinted and create a column for this value
 imprinting_analysis_clean <- imprinting_analysis_clean %>%
-  mutate(Percent_Maternally_Imprinted = ifelse(Imprinted_Mice_Count > 0, (Maternally_Imprinted_Mice_Count / Imprinted_Mice_Count) * 100, NA))
+  mutate(Percent_Maternally_Imprinted = ifelse(Imprinted_Mice_Count > 0, round((Maternally_Imprinted_Mice_Count / Imprinted_Mice_Count) * 100, 1), NA))
 
 # Calculate the percent of imprinted mice that are paternally imprinted and create a column for this value
 imprinting_analysis_clean <- imprinting_analysis_clean %>%
-  mutate(Percent_Paternally_Imprinted = ifelse(Imprinted_Mice_Count > 0, (Paternally_Imprinted_Mice_Count / Imprinted_Mice_Count) * 100, NA))
+  mutate(Percent_Paternally_Imprinted = ifelse(Imprinted_Mice_Count > 0, round((Paternally_Imprinted_Mice_Count / Imprinted_Mice_Count) * 100, 1), NA))
 
 # Save the cleaned data frame as a new .csv file
 write_csv(imprinting_analysis_clean, "data/processed/HIP_RNA-AlSp_parentalASE_ourdata_imprinted.csv")
