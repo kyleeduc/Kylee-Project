@@ -62,3 +62,4 @@ imprinting_analysis_clean <- imprinting_analysis_clean %>%
 
 # Save the cleaned data frame as a new .csv file
 write_csv(imprinting_analysis_clean, "data/processed/HIP_RNA-AlSp_parentalASE_ourdata_imprinted.csv")
+

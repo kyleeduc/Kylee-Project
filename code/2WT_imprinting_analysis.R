@@ -82,7 +82,8 @@ imprinting_analysis <- imprinting_analysis %>%
 
 # Calculate the percent at which the Overall_Expression_Status matches the Expressed_Allele for the genes that are not "Inconsistent". If they are "Inconsistent," check "Expressed_Allele" to identify which expression pattern is expected. If "Maternal" is expected, use the formula (Paternally_Imprinted_Mice_Count/Imprinted_Mice_Count) * 100. If "Paternal" is expected, use the formula (Maternally_Imprinted_Mice_Count/Imprinted_Mice_Count) * 100. Create a column called "Percent_Matching" and set it to this value.
 imprinting_analysis <- imprinting_analysis %>%
-  mutate(Percent_Matching = case_when(
+  mutate(Expressed_Allele = trimws(Expressed_Allele)
+    ,Percent_Matching = case_when(
     Data_Matching == "Yes" ~ 100,
     Data_Matching == "No" ~ 0,
     Data_Matching == "Inconsistent" & Expressed_Allele == "Maternal" ~ round((Paternally_Imprinted_Mice_Count / Imprinted_Mice_Count) * 100, 1),
