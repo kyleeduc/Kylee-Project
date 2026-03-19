@@ -85,4 +85,3 @@ write_csv(genotype_consistency, "data/processed/genotype_consistency.csv")
 
 
 
-
