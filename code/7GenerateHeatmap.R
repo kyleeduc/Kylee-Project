@@ -62,5 +62,14 @@ heatmap_generated <- heatmap(data_matrix_normalized,
         scale = "row",
         margins = c(5, 10))
 
-# Save the heatmap as a PDF
-pdf("data/processed/HIP_RNA-TPM_heatmap.pdf", width = 8, height = 12)
+# Save heatmap_generated as a PDF to figures/
+pdf("figures/HIP_RNA-TPM_heatmap.pdf", width = 10, height = 10)
+heatmap(data_matrix_normalized,
+        main = "All 26,000 Genes Expression Heatmap",
+        Rowv = NA, 
+        Colv = NA, 
+        scale = "row",
+        margins = c(5, 10))
+dev.off()
+
+
