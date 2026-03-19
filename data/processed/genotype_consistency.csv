@@ -1,113 +1,113 @@
-Gene_Name,Published_Expression,WT_F_Imprint_Status,WT_M_Imprint_Status,HT_F_Imprint_Status,KO_M_Imprint_Status,WT_F_Percent_Matching,WT_M_Percent_Matching,HT_F_Percent_Matching,KO_M_Percent_Matching
-Adam23,Paternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Ampd3,Maternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Ano1,Maternal,Not Imprinted,Paternal,Not Imprinted,Not Imprinted,NA,100,NA,NA
-Aqp1,Maternal,Paternal,Not Imprinted,Not Imprinted,Paternal,100,NA,NA,100
-Asb4,Maternal,Paternal,Paternal,Paternal,Paternal,100,100,100,100
-Ascl2,Maternal,Paternal,Paternal,Paternal,Paternal,100,100,100,100
-Axl,Maternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Begain,Paternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Blcap,Maternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Calcr,Maternal,Paternal,Paternal,Paternal,Paternal,100,100,100,100
-Ccdc40,Paternal,Not Imprinted,Not Imprinted,Paternal,Not Imprinted,NA,NA,0,NA
-Cd81,Maternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Cdh15,Paternal,Maternal,Inconsistent,Inconsistent,Inconsistent,100,66.7,66.7,66.7
-Cdkn1c,Maternal,Paternal,Paternal,Paternal,Paternal,100,100,100,100
-Chrac1,Maternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Commd1,Maternal,Paternal,Paternal,Paternal,Paternal,100,100,100,100
-Copg2,Maternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Dact2,Maternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Dcn,Maternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Ddc,Paternal,Not Imprinted,Paternal,Maternal,Not Imprinted,NA,0,100,NA
-Dhcr7,Maternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Dio3,Paternal,Paternal,Paternal,Paternal,Not Imprinted,0,0,0,NA
-Dlk1,Paternal,Inconsistent,Maternal,Inconsistent,Maternal,66.7,100,66.7,100
-Fkbp6,Paternal,Not Imprinted,Paternal,Paternal,Paternal,NA,0,0,0
-Fthl17a,Paternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Fthl17b,Paternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Fthl17f,Paternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Ftx,Paternal,Not Imprinted,Paternal,Not Imprinted,Paternal,NA,0,NA,0
-Gab1,Paternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Galnt6,Paternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Gatm,Maternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Gm35612,Maternal,Paternal,Paternal,Paternal,Paternal,100,100,100,100
-Gnai3,Maternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Gnas,Maternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Grb10,Maternal,Maternal,Maternal,Maternal,Maternal,0,0,0,0
-H13,Maternal,Maternal,Maternal,Maternal,Maternal,0,0,0,0
-H19,Maternal,Paternal,Paternal,Paternal,Not Imprinted,100,100,100,NA
-Htr2a,Maternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Hymai,Paternal,Paternal,Paternal,Inconsistent,Paternal,0,0,33.3,0
-Igf2,Paternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Igf2r,Maternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Impact,Paternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Inpp5f,Paternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Ins2,Paternal,Paternal,Paternal,Paternal,Paternal,0,0,0,0
-Jade1,Paternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Jpx,Paternal,Not Imprinted,Paternal,Not Imprinted,Paternal,NA,0,NA,0
-Kcnk9,Maternal,Paternal,Paternal,Paternal,Paternal,100,100,100,100
-Kcnq1,Maternal,Paternal,Paternal,Paternal,Paternal,100,100,100,100
-Kcnq1ot1,Paternal,Maternal,Maternal,Maternal,Maternal,100,100,100,100
-Klf14,Maternal,Paternal,Paternal,Paternal,Paternal,100,100,100,100
-Maged2,Maternal,Not Imprinted,Paternal,Not Imprinted,Paternal,NA,100,NA,100
-Magel2,Paternal,Paternal,Inconsistent,Inconsistent,Inconsistent,0,33.3,66.7,66.7
-Magi2,Paternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Mcts2,Paternal,Maternal,Maternal,Maternal,Maternal,100,100,100,100
-Meg3,Maternal,Inconsistent,Inconsistent,Inconsistent,Maternal,33.3,66.7,66.7,0
-Mest,Paternal,Maternal,Maternal,Maternal,Maternal,100,100,100,100
-Mir296,Paternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Mirg,Maternal,Inconsistent,Inconsistent,Inconsistent,Maternal,33.3,66.7,66.7,0
-Mkrn3,Paternal,Paternal,Paternal,Paternal,Paternal,0,0,0,0
-Nap1l4,Maternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Nap1l5,Paternal,Maternal,Maternal,Maternal,Maternal,100,100,100,100
-Nctc1,Paternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Ndn,Paternal,Maternal,Maternal,Maternal,Maternal,100,100,100,100
-Nnat,Paternal,Maternal,Maternal,Maternal,Maternal,100,100,100,100
-Pde10a,Maternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Peg10,Paternal,Maternal,Maternal,Maternal,Maternal,100,100,100,100
-Peg12,Paternal,Paternal,Paternal,Paternal,Paternal,0,0,0,0
-Peg13,Paternal,Maternal,Maternal,Maternal,Maternal,100,100,100,100
-Peg3,Paternal,Maternal,Maternal,Maternal,Maternal,100,100,100,100
-Peg3os,Paternal,Paternal,Paternal,Paternal,Paternal,0,0,0,0
-Phlda2,Maternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Plagl1,Paternal,Maternal,Maternal,Maternal,Maternal,100,100,100,100
-Platr20,Paternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Pon2,Maternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Pon3,Maternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Ppp1r9a,Maternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Prkn,Maternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Qpct,Maternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Rasgrf1,Paternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Rian,Maternal,Inconsistent,Inconsistent,Inconsistent,Maternal,33.3,66.7,66.7,0
-Rtl1,Maternal,Paternal,Paternal,Inconsistent,Paternal,100,100,50,100
-Sall1,Paternal,Maternal,Maternal,Not Imprinted,Maternal,100,100,NA,100
-Sfmbt2,Paternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Sgce,Paternal,Maternal,Maternal,Maternal,Maternal,100,100,100,100
-Slc22a18,Maternal,Paternal,Paternal,Paternal,Paternal,100,100,100,100
-Slc22a2,Maternal,Paternal,Paternal,Paternal,Paternal,100,100,100,100
-Slc22a3,Maternal,Paternal,Paternal,Paternal,Paternal,100,100,100,100
-Slc38a4,Paternal,Paternal,Paternal,Paternal,Paternal,0,0,0,0
-Smoc1,Paternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Smoc2,Maternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Snrpn,Paternal,Maternal,Maternal,Maternal,Maternal,100,100,100,100
-Snx14,Paternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Tfpi2,Maternal,Not Imprinted,Paternal,Not Imprinted,Not Imprinted,NA,100,NA,NA
-Th,Maternal,Paternal,Paternal,Paternal,Paternal,100,100,100,100
-Thbs2,Maternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Tnfrsf22,Maternal,Paternal,Paternal,Paternal,Paternal,100,100,100,100
-Tnfrsf23,Maternal,Paternal,Paternal,Paternal,Paternal,100,100,100,100
-Tnfrsf26,Maternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Trappc9,Maternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Tsix,Maternal,Paternal,Paternal,Paternal,Paternal,100,100,100,100
-Tssc4,Maternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Ube3a,Maternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Usp29,Paternal,Maternal,Maternal,Maternal,Maternal,100,100,100,100
-Wt1,Maternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Xist,Paternal,Not Imprinted,Paternal,Not Imprinted,Paternal,NA,0,NA,0
-Xlr3b,Maternal,Paternal,Paternal,Paternal,Paternal,100,100,100,100
-Zdbf2,Paternal,Maternal,Maternal,Maternal,Maternal,100,100,100,100
-Zfp64,Paternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Zim1,Maternal,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
-Zim2,Maternal,Paternal,Not Imprinted,Not Imprinted,Not Imprinted,100,NA,NA,NA
-Zim3,Maternal,Paternal,Paternal,Paternal,Paternal,100,100,100,100
-Zrsr1,Paternal,Maternal,Maternal,Maternal,Maternal,100,100,100,100
+Gene_Name,Published_Expression,WT_F_Imprinted_Count,WT_M_Imprinted_Count,HT_F_Imprinted_Count,KO_M_Imprinted_Count,WT_F_Imprint_Status,WT_M_Imprint_Status,HT_F_Imprint_Status,KO_M_Imprint_Status,WT_F_Percent_Matching,WT_M_Percent_Matching,HT_F_Percent_Matching,KO_M_Percent_Matching
+Adam23,Paternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Ampd3,Maternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Ano1,Maternal,0,1,0,0,Not Imprinted,Paternal,Not Imprinted,Not Imprinted,NA,100,NA,NA
+Aqp1,Maternal,1,0,0,2,Paternal,Not Imprinted,Not Imprinted,Paternal,100,NA,NA,100
+Asb4,Maternal,3,2,3,3,Paternal,Paternal,Paternal,Paternal,100,100,100,100
+Ascl2,Maternal,3,1,2,2,Paternal,Paternal,Paternal,Paternal,100,100,100,100
+Axl,Maternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Begain,Paternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Blcap,Maternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Calcr,Maternal,2,2,1,2,Paternal,Paternal,Paternal,Paternal,100,100,100,100
+Ccdc40,Paternal,0,0,1,0,Not Imprinted,Not Imprinted,Paternal,Not Imprinted,NA,NA,0,NA
+Cd81,Maternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Cdh15,Paternal,3,3,3,3,Maternal,Inconsistent,Inconsistent,Inconsistent,100,66.7,66.7,66.7
+Cdkn1c,Maternal,3,3,3,3,Paternal,Paternal,Paternal,Paternal,100,100,100,100
+Chrac1,Maternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Commd1,Maternal,3,2,2,3,Paternal,Paternal,Paternal,Paternal,100,100,100,100
+Copg2,Maternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Dact2,Maternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Dcn,Maternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Ddc,Paternal,0,1,1,0,Not Imprinted,Paternal,Maternal,Not Imprinted,NA,0,100,NA
+Dhcr7,Maternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Dio3,Paternal,1,3,1,0,Paternal,Paternal,Paternal,Not Imprinted,0,0,0,NA
+Dlk1,Paternal,3,3,3,3,Inconsistent,Maternal,Inconsistent,Maternal,66.7,100,66.7,100
+Fkbp6,Paternal,0,2,1,1,Not Imprinted,Paternal,Paternal,Paternal,NA,0,0,0
+Fthl17a,Paternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Fthl17b,Paternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Fthl17f,Paternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Ftx,Paternal,0,3,0,3,Not Imprinted,Paternal,Not Imprinted,Paternal,NA,0,NA,0
+Gab1,Paternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Galnt6,Paternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Gatm,Maternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Gm35612,Maternal,3,3,3,3,Paternal,Paternal,Paternal,Paternal,100,100,100,100
+Gnai3,Maternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Gnas,Maternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Grb10,Maternal,1,1,3,3,Maternal,Maternal,Maternal,Maternal,0,0,0,0
+H13,Maternal,1,1,1,1,Maternal,Maternal,Maternal,Maternal,0,0,0,0
+H19,Maternal,2,2,1,0,Paternal,Paternal,Paternal,Not Imprinted,100,100,100,NA
+Htr2a,Maternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Hymai,Paternal,3,3,3,3,Paternal,Paternal,Inconsistent,Paternal,0,0,33.3,0
+Igf2,Paternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Igf2r,Maternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Impact,Paternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Inpp5f,Paternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Ins2,Paternal,2,3,2,1,Paternal,Paternal,Paternal,Paternal,0,0,0,0
+Jade1,Paternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Jpx,Paternal,0,3,0,3,Not Imprinted,Paternal,Not Imprinted,Paternal,NA,0,NA,0
+Kcnk9,Maternal,3,3,3,3,Paternal,Paternal,Paternal,Paternal,100,100,100,100
+Kcnq1,Maternal,3,3,3,3,Paternal,Paternal,Paternal,Paternal,100,100,100,100
+Kcnq1ot1,Paternal,3,3,3,3,Maternal,Maternal,Maternal,Maternal,100,100,100,100
+Klf14,Maternal,3,3,2,3,Paternal,Paternal,Paternal,Paternal,100,100,100,100
+Maged2,Maternal,0,3,0,3,Not Imprinted,Paternal,Not Imprinted,Paternal,NA,100,NA,100
+Magel2,Paternal,3,3,3,3,Paternal,Inconsistent,Inconsistent,Inconsistent,0,33.3,66.7,66.7
+Magi2,Paternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Mcts2,Paternal,1,1,1,1,Maternal,Maternal,Maternal,Maternal,100,100,100,100
+Meg3,Maternal,3,3,3,3,Inconsistent,Inconsistent,Inconsistent,Maternal,33.3,66.7,66.7,0
+Mest,Paternal,3,3,3,3,Maternal,Maternal,Maternal,Maternal,100,100,100,100
+Mir296,Paternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Mirg,Maternal,3,3,3,3,Inconsistent,Inconsistent,Inconsistent,Maternal,33.3,66.7,66.7,0
+Mkrn3,Paternal,3,3,3,3,Paternal,Paternal,Paternal,Paternal,0,0,0,0
+Nap1l4,Maternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Nap1l5,Paternal,3,3,3,3,Maternal,Maternal,Maternal,Maternal,100,100,100,100
+Nctc1,Paternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Ndn,Paternal,3,3,3,3,Maternal,Maternal,Maternal,Maternal,100,100,100,100
+Nnat,Paternal,3,3,3,3,Maternal,Maternal,Maternal,Maternal,100,100,100,100
+Pde10a,Maternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Peg10,Paternal,3,3,3,3,Maternal,Maternal,Maternal,Maternal,100,100,100,100
+Peg12,Paternal,3,3,3,3,Paternal,Paternal,Paternal,Paternal,0,0,0,0
+Peg13,Paternal,3,3,3,3,Maternal,Maternal,Maternal,Maternal,100,100,100,100
+Peg3,Paternal,3,3,3,3,Maternal,Maternal,Maternal,Maternal,100,100,100,100
+Peg3os,Paternal,1,2,3,2,Paternal,Paternal,Paternal,Paternal,0,0,0,0
+Phlda2,Maternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Plagl1,Paternal,3,3,3,3,Maternal,Maternal,Maternal,Maternal,100,100,100,100
+Platr20,Paternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Pon2,Maternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Pon3,Maternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Ppp1r9a,Maternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Prkn,Maternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Qpct,Maternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Rasgrf1,Paternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Rian,Maternal,3,3,3,3,Inconsistent,Inconsistent,Inconsistent,Maternal,33.3,66.7,66.7,0
+Rtl1,Maternal,3,3,2,3,Paternal,Paternal,Inconsistent,Paternal,100,100,50,100
+Sall1,Paternal,1,1,0,1,Maternal,Maternal,Not Imprinted,Maternal,100,100,NA,100
+Sfmbt2,Paternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Sgce,Paternal,3,3,3,3,Maternal,Maternal,Maternal,Maternal,100,100,100,100
+Slc22a18,Maternal,3,3,1,2,Paternal,Paternal,Paternal,Paternal,100,100,100,100
+Slc22a2,Maternal,2,2,1,1,Paternal,Paternal,Paternal,Paternal,100,100,100,100
+Slc22a3,Maternal,3,3,2,3,Paternal,Paternal,Paternal,Paternal,100,100,100,100
+Slc38a4,Paternal,1,1,1,2,Paternal,Paternal,Paternal,Paternal,0,0,0,0
+Smoc1,Paternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Smoc2,Maternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Snrpn,Paternal,3,3,3,3,Maternal,Maternal,Maternal,Maternal,100,100,100,100
+Snx14,Paternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Tfpi2,Maternal,0,2,0,0,Not Imprinted,Paternal,Not Imprinted,Not Imprinted,NA,100,NA,NA
+Th,Maternal,3,3,2,3,Paternal,Paternal,Paternal,Paternal,100,100,100,100
+Thbs2,Maternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Tnfrsf22,Maternal,2,2,1,1,Paternal,Paternal,Paternal,Paternal,100,100,100,100
+Tnfrsf23,Maternal,3,3,3,3,Paternal,Paternal,Paternal,Paternal,100,100,100,100
+Tnfrsf26,Maternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Trappc9,Maternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Tsix,Maternal,3,3,3,3,Paternal,Paternal,Paternal,Paternal,100,100,100,100
+Tssc4,Maternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Ube3a,Maternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Usp29,Paternal,3,3,3,3,Maternal,Maternal,Maternal,Maternal,100,100,100,100
+Wt1,Maternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Xist,Paternal,0,1,0,1,Not Imprinted,Paternal,Not Imprinted,Paternal,NA,0,NA,0
+Xlr3b,Maternal,3,3,3,3,Paternal,Paternal,Paternal,Paternal,100,100,100,100
+Zdbf2,Paternal,3,3,3,3,Maternal,Maternal,Maternal,Maternal,100,100,100,100
+Zfp64,Paternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Zim1,Maternal,0,0,0,0,Not Imprinted,Not Imprinted,Not Imprinted,Not Imprinted,NA,NA,NA,NA
+Zim2,Maternal,1,0,0,0,Paternal,Not Imprinted,Not Imprinted,Not Imprinted,100,NA,NA,NA
+Zim3,Maternal,2,1,3,1,Paternal,Paternal,Paternal,Paternal,100,100,100,100
+Zrsr1,Paternal,3,3,3,3,Maternal,Maternal,Maternal,Maternal,100,100,100,100

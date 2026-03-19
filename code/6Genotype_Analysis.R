@@ -36,13 +36,13 @@ for (genotype in genotypes) {
     apply(1, function(x) sum(x == "Maternally Imprinted" | x == "Paternally Imprinted", na.rm = TRUE))
   
   # Create a column that counts "Maternally Imprinted" samples
-  maternally_col <- paste0(genotype, "_Maternally_Imprinted_Count")
+  maternally_col <- paste0(genotype, "_Maternally_Imprint_Count")
   genotype_consistency[[maternally_col]] <- imprinted_gene_data %>%
     select(starts_with(genotype)) %>%
     apply(1, function(x) sum(x == "Maternally Imprinted", na.rm = TRUE))
   
   # Create a column that counts "Paternally Imprinted" samples
-  paternally_col <- paste0(genotype, "_Paternally_Imprinted_Count")
+  paternally_col <- paste0(genotype, "_Paternally_Imprint_Count")
   genotype_consistency[[paternally_col]] <- imprinted_gene_data %>%
     select(starts_with(genotype)) %>%
     apply(1, function(x) sum(x == "Paternally Imprinted", na.rm = TRUE))
@@ -75,7 +75,7 @@ for (genotype in genotypes) {
 
 # Hide the calculation columns, keeping only Gene_Name, Published_Expression, Imprint_Status columns, and Percent_Matching columns
 genotype_consistency <- genotype_consistency %>%
-  select(Gene_Name, Published_Expression, ends_with("_Imprint_Status"), ends_with("_Percent_Matching"))
+  select(Gene_Name, Published_Expression, ends_with("_Imprinted_Count"), ends_with("_Imprint_Status"), ends_with("_Percent_Matching"))
 
 # Write the final data frame to a new CSV file
 write_csv(genotype_consistency, "data/processed/genotype_consistency.csv")
