@@ -134,6 +134,7 @@ pdf("figures/HIP_RNA-TPM_heatmap.pdf", width = 10, height = 12)
 pheatmap(top_matrix_scaled,
          clustering_method = "average",
          show_rownames = FALSE,
+         scale = "row",
          cluster_rows = FALSE,
          annotation_col = annotation_col,
          annotation_colors = annotation_colors)
@@ -167,3 +168,33 @@ ggplot(pca_df, aes(PC1, PC2, color = Genotype, shape = Sex)) +
   ggtitle("PCA of RNA-seq Samples")
 dev.off()
 
+# Select the 50 most variable genes
+gene_variance <- apply(log_matrix, 1, var, na.rm = TRUE)
+top_50_genes <- names(sort(gene_variance, decreasing = TRUE))[1:50]
+
+# Subset log-transformed matrix to top 50 genes
+top_50_matrix <- log_matrix[top_50_genes, ]
+
+# Row-wise z-score normalization for heatmap visualization
+top_50_matrix_scaled <- t(scale(t(top_50_matrix)))
+
+# Replace NA values caused by zero-variance rows
+top_50_matrix_scaled[is.na(top_50_matrix_scaled)] <- 0
+
+# Save annotated heatmap of top 50 variable genes
+pdf("figures/HIP_RNA-TPM_top50_variable_genes_heatmap.pdf", width = 10, height = 12)
+
+pheatmap(top_50_matrix_scaled,
+         main = "Top 50 Most Variable Genes",
+         clustering_method = "ward.D2",
+         show_rownames = TRUE,
+         show_colnames = TRUE,
+         scale = "none",
+         annotation_col = annotation_col,
+         annotation_colors = annotation_colors,
+         color = colorRampPalette(c("blue", "white", "red"))(50),
+         breaks = seq(-3, 3, length.out = 51),
+         fontsize_row = 8,
+         fontsize_col = 10)
+
+dev.off()
