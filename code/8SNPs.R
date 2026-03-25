@@ -104,3 +104,6 @@ ggplot(bin_counts, aes(x = SNP_Bin, y = Gene_Count, fill = Conservation_Status))
 # Save this histogram as a .pdf
 ggsave("figures/HIP_RNA-NumSNPs_Histogram.pdf", width = 8, height = 6)
 
+# Save the analysis_data dataframe as a .csv file in the processed data folder
+write_csv(analysis_data, "data/processed/HIP_RNA-NumSNPsAnalysis.csv")
+
