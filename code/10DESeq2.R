@@ -479,3 +479,47 @@ dev.off()
 pdf("figures/MA_KO_M_vs_HT_F.pdf", width = 6, height = 5)
 plotMA(res_KO_M_vs_HT_F_shrunk, ylim = c(-5, 5), main = "MA Plot: KO_M vs HT_F")
 dev.off()
+
+
+# =========================================================================
+# BEGIN HEATMAP OF SIGNIFICANT GENES
+# =========================================================================
+
+library(pheatmap)
+library(tibble)
+
+# Select significant genes from both KO_M_vs_WT_M and HT_F_vs_WT_F comparisons
+sig_genes <- unique(c(
+  KO_M_vs_WT_M_sig$Gene_Name,
+  HT_F_vs_WT_F_sig$Gene_Name
+))
+
+# Subset normalized counts for significant genes
+heatmap_data <- normalized_counts_df %>%
+  filter(Gene_Name %in% sig_genes)
+
+rownames(heatmap_data) <- heatmap_data$Gene_Name
+heatmap_data$Gene_Name <- NULL
+
+# Scale the data - Convert to Z-Scores
+heatmap_data_scaled <- t(scale(t(heatmap_data)))
+
+# Create annotation for samples
+annotation_col <- data.frame(
+  Genotype = metadata$Genotype
+)
+
+rownames(annotation_col) <- colnames(heatmap_data_scaled)
+
+# Create and save heatmap
+pdf("figures/heatmap_sig_genes.pdf", width = 8, height = 10)
+pheatmap(
+  heatmap_data_scaled,
+  annotation_col = annotation_col,
+  show_rownames = FALSE,
+  cluster_rows = TRUE,
+  cluster_cols = TRUE,
+  scale = "none"
+)
+
+dev.off()
