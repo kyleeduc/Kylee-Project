@@ -178,7 +178,7 @@ rownames(metadata) <- metadata$Sample
 all(colnames(count_matrix) == metadata$Sample)
 
 # ===========================================================================
-# RUN DESeq2
+# DESeq2: WT vs Mut (ALL)
 # ===========================================================================
 
 # Load DESeq2 library
@@ -222,7 +222,7 @@ write_csv(res_df, "data/processed/DESeq2_WT_vs_Mutant.csv")
 
 # ==========================================================================
 # CREATE PCA PLOT
-# ===========================================================================
+# ==========================================================================
 
 ## Make PCA Plot after DESeq2
 library(ggplot2)
@@ -262,3 +262,220 @@ PCA_plot
 
 # Save the PCA plot
 ggsave("figures/WT_vs_Mutant_PCAplot.pdf", plot = PCA_plot, width = 5, height = 4)
+
+# =========================
+# RUN DESeq2 WITH GROUP DESIGN
+# =========================
+
+library(DESeq2)
+
+# Make sure Genotype is a factor
+metadata$Genotype <- factor(metadata$Genotype,
+                            levels = c("WT_M", "KO_M", "WT_F", "HT_F"))
+
+# Create DESeq2 dataset using group as the variable of interest
+dds_group <- DESeqDataSetFromMatrix(
+  countData = count_matrix,
+  colData = metadata,
+  design = ~ Genotype
+)
+
+# Run DESeq2
+dds_group <- DESeq(dds_group)
+
+# Check the available coefficient names
+resultsNames(dds_group)
+
+
+# =========================================================================
+# EXTRACT RESULTS
+# =========================================================================
+
+# WT vs KO in males
+KO_M_vs_WT_M <- results(dds_group, contrast = c("Genotype", "KO_M", "WT_M"))
+
+# WT vs Het in females
+HT_F_vs_WT_F <- results(dds_group, contrast = c("Genotype", "HT_F", "WT_F"))
+
+
+# =========================================================================
+# CONVERT RESULTS TO DATA FRAMES
+# =========================================================================
+
+# KO_M vs WT_M
+KO_M_vs_WT_M_df <- as.data.frame(KO_M_vs_WT_M)
+KO_M_vs_WT_M_df$Gene_Name <- rownames(KO_M_vs_WT_M_df)
+
+# HT_F vs WT_F
+HT_F_vs_WT_F_df <- as.data.frame(HT_F_vs_WT_F)
+HT_F_vs_WT_F_df$Gene_Name <- rownames(HT_F_vs_WT_F_df)
+
+
+# =========================================================================
+# OPTIONAL: SORT BY ADJUSTED P VALUE
+# =========================================================================
+
+KO_M_vs_WT_M_df <- KO_M_vs_WT_M_df[order(KO_M_vs_WT_M_df$padj), ]
+HT_F_vs_WT_F_df <- HT_F_vs_WT_F_df[order(HT_F_vs_WT_F_df$padj), ]
+
+
+# =========================================================================
+# OPTIONAL: KEEP ONLY SIGNIFICANT GENES
+# =========================================================================
+
+PADJ <- 0.05
+
+KO_M_vs_WT_M_sig <- subset(KO_M_vs_WT_M_df, padj < PADJ)
+HT_F_vs_WT_F_sig <- subset(HT_F_vs_WT_F_df, padj < PADJ)
+
+
+# =========================================================================
+# SAVE RESULTS
+# =========================================================================
+
+write_csv(KO_M_vs_WT_M_df, "data/processed/DESeq2_KO_M_vs_WT_M_all.csv")
+write_csv(HT_F_vs_WT_F_df, "data/processed/DESeq2_HT_F_vs_WT_F_all.csv")
+
+write_csv(KO_M_vs_WT_M_sig, "data/processed/DESeq2_KO_M_vs_WT_M_sig.csv")
+write_csv(HT_F_vs_WT_F_sig, "data/processed/DESeq2_HT_F_vs_WT_F_sig.csv")
+
+# =========================================================================
+# SAVE NORMALIZED EXPRESSION TABLE
+# =========================================================================
+
+# Get normalized counts across all samples
+normalized_counts <- counts(dds, normalized = TRUE)
+
+# Convert to data frame and add gene names as a column
+normalized_counts_df <- as.data.frame(normalized_counts)
+normalized_counts_df$Gene_Name <- rownames(normalized_counts_df)
+
+# Move Gene_Name to the first column
+normalized_counts_df <- normalized_counts_df %>%
+  select(Gene_Name, everything())
+
+# Save comprehensive normalized expression table
+write_csv(normalized_counts_df, "data/processed/Normalized_counts_all_samples.csv")
+
+
+# =========================================================================
+# LFC SHRINKAGE: WT vs MUT
+# =========================================================================
+
+# Check coefficient names first
+resultsNames(dds)
+
+# Shrink log2 fold changes for mutant vs WT
+# Use the coefficient name that matches your resultsNames(dds) output
+# May need to install - BiocManager::install("apeglm")
+res_mut_vs_WT_shrunk <- lfcShrink(
+  dds,
+  coef = "genotype_mut_vs_WT",
+  type = "apeglm"
+)
+
+# Convert to data frame and add gene names
+res_mut_vs_WT_shrunk_df <- as.data.frame(res_mut_vs_WT_shrunk)
+res_mut_vs_WT_shrunk_df$Gene_Name <- rownames(res_mut_vs_WT_shrunk_df)
+
+# Save shrunk results
+write_csv(res_mut_vs_WT_shrunk_df, "data/processed/DESeq2_mut_vs_WT_shrunk.csv")
+
+
+# =========================================================================
+# LFC SHRINKAGE: SEX-SPECIFIC COMPARISONS
+# =========================================================================
+
+# Check coefficient names for the Genotype model
+resultsNames(dds_group)
+
+# Shrink log2 fold changes for KO_M vs WT_M
+# May need to install - BiocManager::install("ashr")
+res_KO_M_vs_WT_M_shrunk <- lfcShrink(
+  dds_group,
+  contrast = c("Genotype", "KO_M", "WT_M"),
+  type = "ashr"
+)
+
+
+# Shrink log2 fold changes for HT_F vs WT_F
+res_HT_F_vs_WT_F_shrunk <- lfcShrink(
+  dds_group,
+  contrast = c("Genotype", "HT_F", "WT_F"),
+  type = "ashr"
+)
+
+# Shrink log2 fold changes for KO_M vs HT_F
+res_KO_M_vs_HT_F_shrunk <- lfcShrink(
+  dds_group,
+  contrast = c("Genotype", "KO_M", "HT_F"),
+  type = "ashr"
+)
+
+# Convert each to data frame and add gene names
+res_KO_M_vs_WT_M_shrunk_df <- as.data.frame(res_KO_M_vs_WT_M_shrunk)
+res_KO_M_vs_WT_M_shrunk_df$Gene_Name <- rownames(res_KO_M_vs_WT_M_shrunk_df)
+
+res_HT_F_vs_WT_F_shrunk_df <- as.data.frame(res_HT_F_vs_WT_F_shrunk)
+res_HT_F_vs_WT_F_shrunk_df$Gene_Name <- rownames(res_HT_F_vs_WT_F_shrunk_df)
+
+res_KO_M_vs_HT_F_shrunk_df <- as.data.frame(res_KO_M_vs_HT_F_shrunk)
+res_KO_M_vs_HT_F_shrunk_df$Gene_Name <- rownames(res_KO_M_vs_HT_F_shrunk_df)
+
+# Save shrunk results tables
+write_csv(res_KO_M_vs_WT_M_shrunk_df, "data/processed/DESeq2_KO_M_vs_WT_M_shrunk.csv")
+write_csv(res_HT_F_vs_WT_F_shrunk_df, "data/processed/DESeq2_HT_F_vs_WT_F_shrunk.csv")
+write_csv(res_KO_M_vs_HT_F_shrunk_df, "data/processed/DESeq2_KO_M_vs_HT_F_shrunk.csv")
+
+
+# =========================================================================
+# SAVE UNSHRUNK RESULTS TABLES TOO
+# =========================================================================
+
+# WT vs mut
+res_mut_vs_WT <- results(dds, contrast = c("genotype", "mut", "WT"))
+res_mut_vs_WT_df <- as.data.frame(res_mut_vs_WT)
+res_mut_vs_WT_df$Gene_Name <- rownames(res_mut_vs_WT_df)
+write_csv(res_mut_vs_WT_df, "data/processed/DESeq2_mut_vs_WT_unshrunk.csv")
+
+# KO_M vs WT_M
+res_KO_M_vs_WT_M <- results(dds_group, contrast = c("Genotype", "KO_M", "WT_M"))
+res_KO_M_vs_WT_M_df <- as.data.frame(res_KO_M_vs_WT_M)
+res_KO_M_vs_WT_M_df$Gene_Name <- rownames(res_KO_M_vs_WT_M_df)
+write_csv(res_KO_M_vs_WT_M_df, "data/processed/DESeq2_KO_M_vs_WT_M_unshrunk.csv")
+
+# HT_F vs WT_F
+res_HT_F_vs_WT_F <- results(dds_group, contrast = c("Genotype", "HT_F", "WT_F"))
+res_HT_F_vs_WT_F_df <- as.data.frame(res_HT_F_vs_WT_F)
+res_HT_F_vs_WT_F_df$Gene_Name <- rownames(res_HT_F_vs_WT_F_df)
+write_csv(res_HT_F_vs_WT_F_df, "data/processed/DESeq2_HT_F_vs_WT_F_unshrunk.csv")
+
+# KO_M vs HT_F
+res_KO_M_vs_HT_F <- results(dds_group, contrast = c("Genotype", "KO_M", "HT_F"))
+res_KO_M_vs_HT_F_df <- as.data.frame(res_KO_M_vs_HT_F)
+res_KO_M_vs_HT_F_df$Gene_Name <- rownames(res_KO_M_vs_HT_F_df)
+write_csv(res_KO_M_vs_HT_F_df, "data/processed/DESeq2_KO_M_vs_HT_F_unshrunk.csv")
+
+# =========================================================================
+# MA PLOTS
+# =========================================================================
+
+# MA plot for mut vs WT
+pdf("figures/MA_mut_vs_WT.pdf", width = 6, height = 5)
+plotMA(res_mut_vs_WT_shrunk, ylim = c(-5, 5), main = "MA Plot: Mut vs WT")
+dev.off()
+
+# MA plot for KO_M vs WT_M
+pdf("figures/MA_KO_M_vs_WT_M.pdf", width = 6, height = 5)
+plotMA(res_KO_M_vs_WT_M_shrunk, ylim = c(-5, 5), main = "MA Plot: KO_M vs WT_M")
+dev.off()
+
+# MA plot for HT_F vs WT_F
+pdf("figures/MA_HT_F_vs_WT_F.pdf", width = 6, height = 5)
+plotMA(res_HT_F_vs_WT_F_shrunk, ylim = c(-5, 5), main = "MA Plot: HT_F vs WT_F")
+dev.off()
+
+# MA plot for KO_M vs HT_F
+pdf("figures/MA_KO_M_vs_HT_F.pdf", width = 6, height = 5)
+plotMA(res_KO_M_vs_HT_F_shrunk, ylim = c(-5, 5), main = "MA Plot: KO_M vs HT_F")
+dev.off()
