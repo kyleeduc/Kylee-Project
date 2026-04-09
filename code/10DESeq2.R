@@ -523,3 +523,22 @@ pheatmap(
 )
 
 dev.off()
+
+# =========================================================================
+# CREATE LOG10 BASE MEAN MA PLOTS
+# =========================================================================
+
+library(ggplot2)
+
+# MA plot for mut vs WT with log10 base mean on x-axis
+ma_df <- as.data.frame(res_mut_vs_WT_shrunk)
+ma_df$Gene_Name <- rownames(ma_df)
+ma_df <- ma_df %>%
+  mutate(log10_baseMean = log10(baseMean + 1))  # add 1 to avoid log(0)
+
+ggplot(ma_df, aes(x = log10_baseMean, y = log2FoldChange)) +
+  geom_point(alpha = 0.5) +
+  theme_classic() +
+  xlab("Log10(Base Mean + 1)") +
+  ylab("Log2 Fold Change") +
+  ggtitle("MA Plot: Mut vs WT with Log10 Base Mean")
