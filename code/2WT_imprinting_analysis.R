@@ -63,14 +63,39 @@ imprinting_analysis <- imprinting_analysis %>%
   mutate(Paternally_Imprinted_Mice_Count = sum(c_across(ends_with("_ImprintStatus")) == "Paternally Imprinted", na.rm = TRUE)) %>%
   ungroup()
 
-# If Maternally_Imprinted_Mice_Count is equal to Imprinted_Mice_Count, then create a column called "Overall_Imprinting_Status" and set it to "Maternally Imprinted". If Paternally_Imprinted_Mice_Count is equal to Imprinted_Mice_Count, then set "Overall_Imprinting_Status" to "Paternally Imprinted". If neither of these conditions are met, set "Overall_Imprinting_Status" to "Inconsistent Imprinting".
+# # If Maternally_Imprinted_Mice_Count is equal to Imprinted_Mice_Count, then create a column called "Overall_Expression_Status" and set it to "Maternally Imprinted". If Paternally_Imprinted_Mice_Count is equal to Imprinted_Mice_Count, then set "Overall_Imprinting_Status" to "Paternally Imprinted". If neither of these conditions are met, set "Overall_Imprinting_Status" to "Inconsistent Imprinting".
+# imprinting_analysis <- imprinting_analysis %>%
+#   mutate(Overall_Expression_Status = case_when(
+#     Maternally_Imprinted_Mice_Count == Imprinted_Mice_Count & Imprinted_Mice_Count > 0 ~ "Paternal",
+#     Paternally_Imprinted_Mice_Count == Imprinted_Mice_Count & Imprinted_Mice_Count > 0 ~ "Maternal",
+#     Imprinted_Mice_Count == 0 ~ "Not Imprinted",
+#     TRUE ~ "Inconsistent"
+#   ))
+
+# ============================================================================
+# EDITED OVERALL_EXPRESSION_STATUS (6 WT MICE MUST BE IMPRINTED)
+# ============================================================================
+
+# Determines Expression Status based on whether all 6 WT mice are imprinted
 imprinting_analysis <- imprinting_analysis %>%
-  mutate(Overall_Expression_Status = case_when(
-    Maternally_Imprinted_Mice_Count == Imprinted_Mice_Count & Imprinted_Mice_Count > 0 ~ "Paternal",
-    Paternally_Imprinted_Mice_Count == Imprinted_Mice_Count & Imprinted_Mice_Count > 0 ~ "Maternal",
-    Imprinted_Mice_Count == 0 ~ "Not Imprinted",
-    TRUE ~ "Inconsistent"
-  ))
+  rowwise() %>%
+  mutate(
+    Overall_Expression_Status = {
+      wt <- trimws(as.character(c_across(matches("^WT.*_ImprintStatus$"))))
+      
+      imprinted_labels <- c("Maternally Imprinted", "Paternally Imprinted")
+      n_imprinted <- sum(wt %in% imprinted_labels, na.rm = TRUE)
+      
+      case_when(
+        n_imprinted < 6 ~ "Not Imprinted",
+        all(wt == "Maternally Imprinted") ~ "Paternal",
+        all(wt == "Paternally Imprinted") ~ "Maternal",
+        n_imprinted == 6 ~ "Inconsistent",
+        TRUE ~ "Not Imprinted"
+      )
+    }
+  ) %>%
+  ungroup()
 
 # If Overall_Expression_Status matches "Expressed_Allele", then create a column called "Data_Matching" and set it to "Yes". If Overall_Expression_Status does not match "Expressed_Allele", then set "Data_Matching" to "No". If Overall_Expression_Status is "Inconsistent", then set "Data_Matching" to "Inconsistent". 
 imprinting_analysis <- imprinting_analysis %>%
