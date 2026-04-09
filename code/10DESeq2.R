@@ -263,6 +263,49 @@ PCA_plot
 # Save the PCA plot
 ggsave("figures/WT_vs_Mutant_PCAplot.pdf", plot = PCA_plot, width = 5, height = 4)
 
+# =========================================================================
+# PCA PLOT WITH SAMPLE NAMES
+# =========================================================================
+
+library(ggrepel)
+
+# Define colors for the two genotype groups
+PCApalette <- c("WT" = "steelblue2", "mut" = "mediumorchid2")
+
+# Variance stabilizing transformation
+vsd <- vst(dds, blind = TRUE)
+
+# Create PCA data using genotype as the grouping variable
+pca_data <- plotPCA(vsd, intgroup = c("genotype"), returnData = TRUE)
+
+# Save percent variance explained by PC1 and PC2
+percentVar <- round(100 * attr(pca_data, "percentVar"))
+
+# Add metadata columns back in for plotting options
+pca_data <- data.frame(
+  pca_data,
+  Sample = metadata$Sample,
+  Sex = metadata$Sex,
+  Batch = metadata$Batch,
+  Litter = metadata$Litter
+)
+
+# Create PCA plot with sample labels
+PCA_plot <- ggplot(pca_data, aes(PC1, PC2, color = genotype, shape = Sex)) +
+  geom_point(size = 4.5) +
+  geom_text(aes(label = Sample), vjust = -1, size = 4) +
+  ggtitle("PCA Plot of WT vs Mutant Samples") +
+  scale_color_manual(values = PCApalette) +
+  xlab(paste0("PC1: ", percentVar[1], "% variance")) +
+  ylab(paste0("PC2: ", percentVar[2], "% variance")) +
+  theme_classic()
+
+# View plot
+PCA_plot
+
+# Save the PCA plot
+ggsave("figures/WT_vs_Mutant_PCAplot_labeled.pdf", plot = PCA_plot, width = 6, height = 5)
+
 # =========================
 # RUN DESeq2 WITH GROUP DESIGN
 # =========================
@@ -533,12 +576,100 @@ library(ggplot2)
 # MA plot for mut vs WT with log10 base mean on x-axis
 ma_df <- as.data.frame(res_mut_vs_WT_shrunk)
 ma_df$Gene_Name <- rownames(ma_df)
-ma_df <- ma_df %>%
-  mutate(log10_baseMean = log10(baseMean + 1))  # add 1 to avoid log(0)
 
-ggplot(ma_df, aes(x = log10_baseMean, y = log2FoldChange)) +
+ma_df <- ma_df %>%
+  mutate(
+    log10_baseMean = log10(baseMean + 1),  # avoid log(0)
+    significant = ifelse(padj < 0.05, "Significant", "Not Significant")
+  )
+
+ggplot(ma_df, aes(x = log10_baseMean, y = log2FoldChange, color = significant)) +
   geom_point(alpha = 0.5) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "black") +
+  scale_color_manual(values = c("Significant" = "red", "Not Significant" = "lightgray")) +
   theme_classic() +
   xlab("Log10(Base Mean + 1)") +
   ylab("Log2 Fold Change") +
   ggtitle("MA Plot: Mut vs WT with Log10 Base Mean")
+
+ggsave("figures/MA_plot_mut_vs_WT_log10basemean.pdf", width = 6, height = 5, dpi = 300)
+
+# MA plot for KO_M vs WT_M with log10 base mean on x-axis
+ma_KO_M_df <- as.data.frame(res_KO_M_vs_WT_M_shrunk)
+ma_KO_M_df$Gene_Name <- rownames(ma_KO_M_df)
+ma_KO_M_df <- ma_KO_M_df %>%
+  mutate(
+    log10_baseMean = log10(baseMean + 1),
+    significant = ifelse(padj < 0.05, "Significant", "Not Significant")
+  )
+ggplot(ma_KO_M_df, aes(x = log10_baseMean, y = log2FoldChange, color = significant)) +
+  geom_point(alpha = 0.5) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "black") +
+  scale_color_manual(values = c("Significant" = "red", "Not Significant" = "lightgray")) +
+  theme_classic() +
+  xlab("Log10(Base Mean + 1)") +
+  ylab("Log2 Fold Change") +
+  ggtitle("MA Plot: KO_M vs WT_M with Log10 Base Mean")
+ggsave("figures/MA_plot_KO_M_vs_WT_M_log10basemean.pdf", width = 6, height = 5, dpi = 300)
+
+# MA plot for HT_F vs WT_F with log10 base mean on x-axis
+ma_HT_F_df <- as.data.frame(res_HT_F_vs_WT_F_shrunk)
+ma_HT_F_df$Gene_Name <- rownames(ma_HT_F_df)
+ma_HT_F_df <- ma_HT_F_df %>%
+  mutate(
+    log10_baseMean = log10(baseMean + 1),
+    significant = ifelse(padj < 0.05, "Significant", "Not Significant")
+  )
+ggplot(ma_HT_F_df, aes(x = log10_baseMean, y = log2FoldChange, color = significant)) +
+  geom_point(alpha = 0.5) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "black") +
+  scale_color_manual(values = c("Significant" = "red", "Not Significant" = "lightgray")) +
+  theme_classic() +
+  xlab("Log10(Base Mean + 1)") +
+  ylab("Log2 Fold Change") +
+  ggtitle("MA Plot: HT_F vs WT_F with Log10 Base Mean")
+ggsave("figures/MA_plot_HT_F_vs_WT_F_log10basemean.pdf", width = 6, height = 5, dpi = 300)
+
+# MA plot for KO_M vs HT_F with log10 base mean on x-axis
+ma_KO_M_vs_HT_F_df <- as.data.frame(res_KO_M_vs_HT_F_shrunk)
+ma_KO_M_vs_HT_F_df$Gene_Name <- rownames(ma_KO_M_vs_HT_F_df)
+
+ma_KO_M_vs_HT_F_df <- ma_KO_M_vs_HT_F_df %>%
+  mutate(
+    log10_baseMean = log10(baseMean + 1),
+    significant = ifelse(padj < 0.05, "Significant", "Not Significant")
+  )
+ggplot(ma_KO_M_vs_HT_F_df, aes(x = log10_baseMean, y = log2FoldChange, color = significant)) +
+  geom_point(alpha = 0.5) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "black") +
+  scale_color_manual(values = c("Significant" = "red", "Not Significant" = "lightgray")) +
+  theme_classic() +
+  xlab("Log10(Base Mean + 1)") +
+  ylab("Log2 Fold Change") +
+  ggtitle("MA Plot: KO_M vs HT_F with Log10 Base Mean")
+ggsave("figures/MA_plot_KO_M_vs_HT_F_log10basemean.pdf", width = 6, height = 5, dpi = 300)
+
+# MA plot for WT_M vs WT_F with log10 base mean on x-axis
+res_WT_F_vs_WT_M_shrunk <- lfcShrink(
+  dds_group,
+  contrast = c("Genotype", "WT_F", "WT_M"),
+  type = "ashr"
+)
+
+ma_WT_F_vs_WT_M_df <- as.data.frame(res_WT_F_vs_WT_M_shrunk)
+ma_WT_F_vs_WT_M_df$Gene_Name <- rownames(ma_WT_F_vs_WT_M_df)
+ma_WT_F_vs_WT_M_df <- ma_WT_F_vs_WT_M_df %>%
+  mutate(
+    log10_baseMean = log10(baseMean + 1),
+    significant = ifelse(padj < 0.05, "Significant", "Not Significant")
+  )
+ggplot(ma_WT_F_vs_WT_M_df, aes(x = log10_baseMean, y = log2FoldChange, color = significant)) +
+  geom_point(alpha = 0.5) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "black") +
+  scale_color_manual(values = c("Significant" = "red", "Not Significant" = "lightgray")) +
+  theme_classic() +
+  xlab("Log10(Base Mean + 1)") +
+  ylab("Log2 Fold Change") +
+  ggtitle("MA Plot: WT_F vs WT_M with Log10 Base Mean")
+ggsave("figures/MA_plot_WT_F_vs_WT_M_log10basemean.pdf", width = 6, height = 5, dpi = 300)
+

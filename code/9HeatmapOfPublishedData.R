@@ -21,9 +21,13 @@ setwd("/Users/kyleeduczyminski/Documents/Iwase-Lab/Kylee-Project")
 tpm <- read_excel("data/raw/HIP_RNA-TPM.xlsx")
 imprinted_genes <- read_csv("data/processed/HIP_RNA-AlSp_parentalASE_imprinting_analysis.csv")
 
+# Filter out genes that are not considered imprinted in the imprinted_genes dataset
+imprinted_genes_filtered <- imprinted_genes %>%
+  filter(Overall_Expression_Status != "Not Imprinted")
+
 # If Gene_Name from imprinted_genes is present in tpm, then keep that row in tpm
 tpm_imprinted <- tpm %>%
-  filter(Gene_Name %in% imprinted_genes$Gene_Name)
+  filter(Gene_Name %in% imprinted_genes_filtered$Gene_Name)
 
 # Select sample columns
 old_names <- c("1_S245", "2_S246", "3_S247", "4_S248", "5_S249", "6_S250", 
