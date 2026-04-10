@@ -1,0 +1,383 @@
+##################################################################
+# Author: Ilakkiya Venkatachalam
+# About: Display DE expression across genotype comparisons for only the imprinted genes
+# Input: published imprinted genes lists
+#        shrunk comparison results tables for the four combinations I want to test
+#         1. x: WT_F vs WT_M y: HT_F vs WT_F (better as volcano? not sex on geno interaction?)
+#         2. x: WT_M vs WT_F y: KO_M vs WT_M (better as volcano? not sex on geno interaction?)
+#         3. x: HT_F vs WT_F y: KO_M vs WT_M
+#         4. x: KO_M vs HT_F y: WT_M vs WT_F
+# Output: Pairwise scatterplots with imprinted genes colored by maternal or paternally expressed genes
+##################################################################
+setwd("C:/Users/ilakk/Dropbox (University of Michigan)/1Iwase Lab/Project - imprinted genes in F1 hybrid KDM5C-KO mice/2026.03.17_Kylee-ongoing-analysis/Kylee-Project")
+
+### Read in the 5 _shrunk.csv processed results tables from data/processed
+column_names <- c("baseMean", "log2FoldChange", "lfcSE", "pvalue", "padj", "gene_symbol")
+HT_F_vs_WT_F <- read.table("data/processed/DESeq2_HT_F_vs_WT_F_shrunk.csv", sep = ",", header = TRUE, stringsAsFactors = FALSE, col.names = column_names)
+KO_M_vs_WT_M <- read.table("data/processed/DESeq2_KO_M_vs_WT_M_shrunk.csv", sep = ",", header = TRUE, stringsAsFactors = FALSE, col.names = column_names)
+KO_M_vs_HT_F <- read.table("data/processed/DESeq2_KO_M_vs_HT_F_shrunk.csv", sep = ",", header = TRUE, stringsAsFactors = FALSE, col.names = column_names)
+WT_M_vs_WT_F <- read.table("data/processed/DESeq2_WT_M_vs_WT_F_shrunk.csv", sep = ",", header = TRUE, stringsAsFactors = FALSE, col.names = column_names)
+
+# reorder to gave gene_symbol as the first column
+reorder <- function(df) {
+  df <- df[, c("gene_symbol", "baseMean", "log2FoldChange", "lfcSE", "pvalue", "padj")]
+  return(df)
+}
+
+HT_F_vs_WT_F <- reorder(HT_F_vs_WT_F)
+KO_M_vs_WT_M <- reorder(KO_M_vs_WT_M)
+KO_M_vs_HT_F <- reorder(KO_M_vs_HT_F)
+WT_M_vs_WT_F <- reorder(WT_M_vs_WT_F)
+
+### Read in published imprinted gene lists (has expressed allele, not imprinted allele - helpful!)
+library(dplyr)
+imp_brain <- read.csv("data/raw/imprinted_brain_jf1x129s1.csv", check.names = FALSE) %>% 
+  select(-Strand, -Status) %>%# remove unnecessary columns
+  rename_with(~ gsub(" ", "_", .x)) #rename columns to be safe
+
+imp_general <- read.csv("data/raw/imprinted_gene_list.csv") %>%
+  select(-Status)# remove unnecessary columns
+
+# Combine imprinted_brain and imprinted_genes, keeping imprinted_brain for duplicates
+imp_ref <- bind_rows(imp_brain, imp_general) %>%
+  distinct(Gene, .keep_all = TRUE)  # Keep first occurrence (imp_brain) if duplicate
+
+### Subset the 4 DESeq2 results tables to only imprinted genes
+## Function to filter only the rows with imprinted gene matches
+## All return only 162 rows (81 genes out of the 147 list)
+filter_imprinted <- function(df) {
+  imp_genes <- unique(imp_ref$Gene)  # get unique list of imprinted gene symbols to match against
+  df$base_gene <- sub("_(129|JF1)$", "", df$gene_symbol)  # strip trailing _129 or _JF1 to get base gene name
+  df <- df[df$base_gene %in% imp_genes, , drop = FALSE]  # keep only rows whose base gene is imprinted
+  df <- df %>% select(-base_gene)  # remove helper column
+  #remove any rows in df where padj is NA
+  df <- df[!is.na(df$padj), ]
+  df #returns out
+}
+
+HT_F_vs_WT_F_imp <- filter_imprinted(HT_F_vs_WT_F)
+KO_M_vs_WT_M_imp <- filter_imprinted(KO_M_vs_WT_M)
+KO_M_vs_HT_F_imp <- filter_imprinted(KO_M_vs_HT_F)
+WT_M_vs_WT_F_imp <- filter_imprinted(WT_M_vs_WT_F)
+
+### Add information about expressed allele and active/imprinted allele identity for each imprinted gene
+add_imprinting_status <- function(df) {  # annotate df using global imp_ref and df$gene_symbol
+  df$base_gene <- sub("_(129|JF1)$", "", df$gene_symbol)  # base gene name = text before _129 or _JF1
+  df$suffix <- sub("^.*_(129|JF1)$", "\\1", df$gene_symbol)  # capture the allele suffix ("129" or "JF1")
+  
+  map_vec <- setNames(as.character(imp_ref$Expressed_Allele), imp_ref$Gene)  # named lookup: Gene -> Expressed_Allele
+  df$expressed_allele <- unname(map_vec[df$base_gene])  # add expressed_allele from imp_ref for matching genes (NA if no match)
+  
+  df$allele_status <- ifelse(  # create allele_status based on suffix + expressed_allele rules
+    (df$suffix == "129" & df$expressed_allele == "Maternal") |
+      (df$suffix == "JF1" & df$expressed_allele == "Paternal"),
+    "active",
+    ifelse(
+      (df$suffix == "129" & df$expressed_allele == "Paternal") |
+        (df$suffix == "JF1" & df$expressed_allele == "Maternal"),
+      "imprinted",
+      NA_character_
+    )
+  )
+  
+  df$base_gene <- NULL  # drop helper column
+  df$suffix <- NULL  # drop helper column
+  df  # return annotated dataframe
+}
+
+HT_F_vs_WT_F_imp <- add_imprinting_status(HT_F_vs_WT_F_imp)
+KO_M_vs_WT_M_imp <- add_imprinting_status(KO_M_vs_WT_M_imp)
+KO_M_vs_HT_F_imp <- add_imprinting_status(KO_M_vs_HT_F_imp)
+WT_M_vs_WT_F_imp <- add_imprinting_status(WT_M_vs_WT_F_imp)
+
+### Combine all tables into one for ease
+library(dplyr)
+
+# keep annotations from ONE table (they should be the same across all)
+anno_tbl <- HT_F_vs_WT_F_imp %>%                               # pick any one of the 4
+  select(gene_symbol, expressed_allele, allele_status) %>%     # keep only annotation cols
+  distinct(gene_symbol, .keep_all = TRUE)                      # ensure 1 row per gene_symbol
+
+# list of (gene_symbol, log2FoldChange) tables to merge
+file_list <- list(
+  HT_F_vs_WT_F_imp %>% select(gene_symbol, log2FoldChange),     # table 1
+  KO_M_vs_WT_M_imp %>% select(gene_symbol, log2FoldChange),     # table 2
+  KO_M_vs_HT_F_imp %>% select(gene_symbol, log2FoldChange),     # table 3
+  WT_M_vs_WT_F_imp %>% select(gene_symbol, log2FoldChange)      # table 4
+)
+
+# merge all log2FCs by gene_symbol
+allLog2FC <- Reduce(function(x, y) merge(x, y, by = "gene_symbol", all = TRUE), file_list)
+
+# rename the 4 log2FC columns (match list order!)
+colnames(allLog2FC) <- c("gene_symbol",
+                         "log2FoldChange_HTF_vs_WTF",
+                         "log2FoldChange_KOM_vs_WTM",
+                         "log2FoldChange_KOM_vs_HTF",
+                         "log2FoldChange_WTM_vs_WTF")
+
+# add annotation columns once
+allLog2FC <- allLog2FC %>%
+  left_join(anno_tbl, by = "gene_symbol")
+
+## Shortcut, start here
+write.table(allLog2FC, "data/processed/allLog2FC-for-scatterplots.csv", sep=",", row.names=FALSE)
+
+# =========================
+# Pairwise Scatter Plots
+# =========================
+### Plot Related Functions
+## Theme for plots
+library(ggplot2)
+theme_set(theme_classic(base_size = 11) + #theme_set sets a theme for all ggplot usage later. setting theme to theme_classic
+            #making additional modifications to above existing theme by calling theme()
+            theme(axis.title.y = element_text(margin = margin(0,10,0,0), size = rel(1.2), color = 'black'), 
+                  axis.title.x = element_text(hjust = 0.5, margin = margin(10,0,0,0), size = rel(1.2), color = 'black'),
+                  plot.title = element_text(hjust = 0.5, face = "plain")))
+
+## Function for passing in all variables and generating scatterplots
+threshold <- 1 # 1 = genes with 2x change. 0.6 = genes with 1.52x change
+axes <- 30 # the range of both the x and y axes
+ticks <- 5 # frequency of tick marks along both axes
+library(ggrepel) # for non-overlapping text labels
+library(ggplot2) # plotting
+
+myscatterplot_fxn <- function(df, xvar, yvar, xlab_txt, ylab_txt, title_txt) {  # main plotting function
+  # Calculate Intercept for the scatter
+  fit1 <- lm(reformulate(xvar, yvar), data = df)  # fit yvar ~ xvar using column names passed as strings
+  coefs <- coef(fit1)  # extract coefficients
+  slope1 <- unname(coefs[[xvar]])  # coefficient for xvar
+  intercept1 <- unname(coefs[["(Intercept)"]])  # intercept
+  r_squared1 <- summary(fit1)$r.squared  # model R^2
+  
+  # Add helper columns for coloring/shaping
+  df$.outside <- (abs(df[[xvar]]) >= threshold) | (abs(df[[yvar]]) >= threshold)  # outside dashed box in ANY direction (any quadrant)
+  df$.colgrp <- ifelse(  # color group: gray if inside; otherwise blue/pink by expressed_allele
+    df$.outside,
+    ifelse(df$expressed_allele == "Paternal", "Paternal", "Maternal"),
+    "Inside"
+  )
+  df$.fillgrp <- ifelse(  # fill group: white (hollow) for active; filled for imprinted; gray inside
+    df$.outside,
+    ifelse(df$allele_status == "active", "hollow", "filled"),
+    "inside"
+  )
+  
+  # Generating the plot
+  scatterplot <- ggplot(data = df, aes(x = .data[[xvar]], y = .data[[yvar]])) +  # initialize plot with dynamic columns
+    geom_vline(xintercept = c(-threshold, threshold), col = "lightgray", linetype = "dashed") +  # vertical threshold lines
+    geom_hline(yintercept = c(-threshold, threshold), col = "lightgray", linetype = "dashed") +  # horizontal threshold lines
+    geom_point(  # points
+      aes(color = .colgrp, fill = .colgrp, shape = .fillgrp),  # color by paternal/maternal/inside; shape by hollow/filled
+      size = 1.2, stroke = 0.6  # stroke controls outline thickness (useful for hollow points)
+    ) +
+    coord_cartesian(ylim = c(-axes, axes), xlim = c(-axes, axes)) +  # set visible bounds without dropping data
+    labs(x = xlab_txt, y = ylab_txt) +  # axis labels
+    scale_x_continuous(breaks = seq(-axes, axes, ticks)) +  # x ticks
+    scale_y_continuous(breaks = seq(-axes, axes, ticks)) +  # y ticks
+    ggtitle(paste0(title_txt)) +  # title
+    # label ONLY genes outside threshold (all quadrants)
+    geom_text_repel(
+      data = df[df$.outside, ],  # label only outside-threshold points
+      aes(label = gene_symbol),  # text labels
+      max.overlaps = 60, direction = c("both"), force = 0.5, force_pull = 2,  # label repulsion settings
+      point.padding = 0.1, box.padding = 0.25, segment.curvature = -0.1, segment.angle = 20,  # label styling
+      na.rm = TRUE, show.legend = FALSE  # cleanup
+    ) +
+    # Circle shapes only: 21 = filled circle (uses fill), 1 = hollow circle
+    scale_shape_manual(values = c(hollow = 1, filled = 21, inside = 21), guide = "none") +  # inside points use filled circle shape
+    # Colors: inside = light gray; outside = blue/pink by expressed allele
+    scale_color_manual(values = c(Inside = "grey25", Paternal = "dodgerblue3", Maternal = "deeppink3"), guide = "none") +  # outline colors
+    scale_fill_manual(values = c(Inside = "grey25", Paternal = "dodgerblue3", Maternal = "deeppink3"), guide = "none") +  # fill colors (only used by shape 21)
+    # Make "hollow" points have white fill while keeping colored outline
+    guides(fill = "none", color = "none", shape = "none") +  # no legends
+    geom_point(  # second layer to force hollow fill to white (only for outside+active)
+      data = df[df$.outside & df$allele_status == "active", ],  # only hollow points
+      aes(x = .data[[xvar]], y = .data[[yvar]], color = .colgrp),  # keep colored outlines
+      shape = 21, fill = "white", size = 1.2, stroke = 0.6, inherit.aes = FALSE  # white fill, colored border
+    ) +
+    geom_smooth(method = "lm", se = TRUE, color = "lavender", fill = "gray85", alpha = 0.4) +  # regression line + CI
+    annotate(  # regression equation + R^2 text box
+      "text", x = (axes/2), y = axes/3,
+      label = paste0(
+        "y = ", round(intercept1, 3), " + ", round(slope1, 3), "x\n",
+        "R² = ", round(r_squared1, 3)
+      ),
+      hjust = 1, size = 4, color = "black"
+    )
+  
+  scatterplot  # return ggplot object
+}
+
+### Generate the two pariwise scatterplots
+## Comparing x: HT_F vs WT_F y: KO_M vs WT_M
+myscatterplot_1 <- myscatterplot_fxn(
+  allLog2FC,
+  "log2FoldChange_HTF_vs_WTF",
+  "log2FoldChange_KOM_vs_WTM",
+  "Kdm5c +/- vs WT +/+",
+  "Kdm5c -/Y vs WT +/Y",
+  "Log2FC of imprinted genes in Kdm5c mutants relative to WT"
+)
+myscatterplot_1
+ggsave(filename = paste0("scatterplot_imp_log2FC-HT_FvWT_F-KO_MvWT_M.pdf"), plot = myscatterplot1, path = "figures/", width = 5, height = 5.5, units = "in", dpi = 300)
+
+## Comparing x: KO_M vs HT_F y: WT_M vs WT_F
+myscatterplot_2 <- myscatterplot_fxn(
+  allLog2FC,
+  "log2FoldChange_KOM_vs_HTF",
+  "log2FoldChange_WTM_vs_WTF",
+  "Kdm5c -/Y vs Kdm5c +/-",
+  "WT +/Y vs WT +/+",
+  "Log2FC of imprinted genes in Kdm5c mutants aligned by sex"
+)
+myscatterplot_2
+ggsave(filename = paste0("scatterplot_imp_log2FC-KO_MvHT_F-WT_MvWT_F.pdf"), plot = myscatterplot2, path = "figures/", width = 5, height = 5.5, units = "in", dpi = 300)
+
+# ### Merge tables again for volcano includes p-adj
+# # keep annotations from ONE table (they should be the same across all)
+# anno_tbl <- HT_F_vs_WT_F_imp %>%                               # pick any one of the 4
+#   select(gene_symbol, expressed_allele, allele_status) %>%     # keep only annotation cols
+#   distinct(gene_symbol, .keep_all = TRUE)                      # ensure 1 row per gene_symbol
+# 
+# # list of (gene_symbol, log2FoldChange) tables to merge
+# file_list <- list(
+#   HT_F_vs_WT_F_imp %>% select(gene_symbol, log2FoldChange, padj),     # table 1
+#   KO_M_vs_WT_M_imp %>% select(gene_symbol, log2FoldChange, padj),     # table 2
+#   KO_M_vs_HT_F_imp %>% select(gene_symbol, log2FoldChange, padj),     # table 3
+#   WT_M_vs_WT_F_imp %>% select(gene_symbol, log2FoldChange, padj)      # table 4
+# )
+# 
+# # merge all log2FCs by gene_symbol
+# allLog2FC <- Reduce(function(x, y) merge(x, y, by = "gene_symbol", all = TRUE), file_list)
+# 
+# # rename the 4 log2FC columns (match list order!)
+# colnames(allLog2FC) <- c("gene_symbol",
+#                          "log2FC_HTF_vs_WTF",
+#                          "padj_HTF_vs_WTF",
+#                          "log2FC_KOM_vs_WTM",
+#                          "padj_KOM_vs_WTM",
+#                          "log2FC_KOM_vs_HTF",
+#                          "padj_KOM_vs_HTF",
+#                          "log2FC_WTM_vs_WTF",
+#                          "padj_WTM_vs_WTF")
+# 
+# # add annotation columns once
+# allLog2FC <- allLog2FC %>%
+#   left_join(anno_tbl, by = "gene_symbol")
+# 
+# ## Shortcut, start here
+# write.table(allLog2FC, "data/processed/allLog2FC-for-volcanos.csv", sep=",", row.names=FALSE)
+# allLog2FC <- read.table("data/processed/allLog2FC-for-volcanos.csv", sep = ",", header = TRUE, stringsAsFactors = FALSE)
+
+# ==========================
+# Volcano Plots
+# ==========================
+## Volcano plot function (keeps the same color/shape logic you used for scatterplots)
+## Assumes df has: gene_symbol, expressed_allele (Maternal/Paternal), allele_status (active/imprinted),
+## and the DESeq2-style columns: log2FoldChange and padj (or whichever you pass in)
+
+library(ggplot2)   # plotting
+library(ggrepel)   # non-overlapping labels
+
+## ---- standard volcano settings (outside the function) ----
+lfc_threshold <- 1          # abs(log2FC) cutoff
+padj_threshold <- 0.05      # adjusted p-value cutoff
+x_axes <- 30                # volcano x range
+y_axes <- 50                # volcano y range
+x_ticks <- 2                # x tick spacing
+y_ticks <- 10               # y tick spacing
+label_max_overlaps <- 60    # max labels shown by ggrepel
+
+## ---- volcano plot function ----
+myvolcano_fxn <- function(df, lfc_col = "log2FoldChange", padj_col = "padj",
+                          xlab_txt, ylab_txt = "-log10(padj)", title_txt) {
+  
+  if (!lfc_col %in% names(df)) stop("lfc_col not found: ", lfc_col)  # ensure LFC col exists
+  if (!padj_col %in% names(df)) stop("padj_col not found: ", padj_col)  # ensure padj col exists
+  if (!"expressed_allele" %in% names(df)) stop("Missing column: expressed_allele")  # needed for colors
+  if (!"allele_status" %in% names(df)) stop("Missing column: allele_status")  # needed for hollow/filled
+  if (!"gene_symbol" %in% names(df)) stop("Missing column: gene_symbol")  # needed for labels
+  
+  df$.lfc  <- as.numeric(df[[lfc_col]])                    # force numeric LFC
+  df$.padj <- suppressWarnings(as.numeric(df[[padj_col]])) # force numeric padj
+  df$.y    <- -log10(df$.padj)                             # y = -log10(padj)
+  df$.y[!is.finite(df$.y)] <- NA_real_                     # set Inf/-Inf to NA (e.g., padj = 0)
+  
+  df$.sig <- !is.na(df$.padj) & (df$.padj <= padj_threshold) &  # sig by padj
+    !is.na(df$.lfc) & (abs(df$.lfc) >= lfc_threshold)           # AND by abs(log2FC)
+  
+  df$.colgrp <- ifelse(                                    # color group
+    df$.sig,
+    ifelse(df$expressed_allele == "Paternal", "Paternal", "Maternal"),
+    "NotSig"
+  )
+  
+  df$.shapegrp <- ifelse(                                  # shape group (circle-only; hollowness from fill)
+    df$.sig & df$allele_status == "active", "hollow",
+    ifelse(df$.sig & df$allele_status == "imprinted", "filled", "notsig")
+  )
+  
+  df$.fillcol <- ifelse(df$.shapegrp == "hollow", "white", df$.colgrp)  # hollow points get white fill
+  
+  p <- ggplot(df, aes(x = .lfc, y = .y)) +                 # plot with temp numeric cols
+    geom_vline(xintercept = c(-lfc_threshold, lfc_threshold), col = "lightgray", linetype = "dashed") +  # LFC cutoffs
+    geom_hline(yintercept = -log10(padj_threshold), col = "lightgray", linetype = "dashed") +            # padj cutoff
+    geom_point(aes(color = .colgrp, fill = .fillcol, shape = .shapegrp),
+               size = 1.2, stroke = 0.6, na.rm = TRUE) +   # points
+    geom_text_repel(data = df[df$.sig, ],                  # label significant genes only
+                    aes(label = gene_symbol),
+                    max.overlaps = label_max_overlaps, direction = "both", force = 0.5, force_pull = 2,
+                    point.padding = 0.1, box.padding = 0.25, segment.curvature = -0.1, segment.angle = 20,
+                    na.rm = TRUE, show.legend = FALSE) +
+    coord_cartesian(xlim = c(-x_axes, x_axes), ylim = c(0, y_axes)) +  # axis limits
+    scale_x_continuous(breaks = seq(-x_axes, x_axes, x_ticks)) +       # x ticks
+    scale_y_continuous(breaks = seq(0, y_axes, y_axes/ (y_axes/y_ticks))) +  # y ticks (keeps your y_ticks intent)
+    labs(x = xlab_txt, y = ylab_txt, title = title_txt) +              # labels
+    scale_shape_manual(values = c(hollow = 21, filled = 21, notsig = 21), guide = "none") +  # circle-only
+    scale_color_manual(values = c(NotSig = "grey25", Paternal = "dodgerblue3", Maternal = "deeppink3"), guide = "none") +  # outlines
+    scale_fill_manual(values = c(white = "white", NotSig = "grey25", Paternal = "dodgerblue3", Maternal = "deeppink3"), guide = "none")  # fills
+  
+  df$.lfc <- df$.padj <- df$.y <- df$.sig <- df$.colgrp <- df$.shapegrp <- df$.fillcol <- NULL  # remove temp cols (local copy only)
+  p  # return plot
+}
+
+## ---- Generate volcano plots ----
+# HT_F vs WT_F
+v1 <- myvolcano_fxn(HT_F_vs_WT_F_imp, "log2FoldChange", "padj",
+                    "log2FC", "-log10(padj)", "Kdm5c +/- vs +/+ Females")
+v1
+
+# KO_M vs WT_M
+v2 <- myvolcano_fxn(KO_M_vs_WT_M_imp, "log2FoldChange", "padj",
+                    "log2FC", "-log10(padj)", "Kdm5c -/Y vs +/Y Males")
+v2
+
+# KO_M vs HT_F
+v3 <- myvolcano_fxn(KO_M_vs_HT_F_imp, "log2FoldChange", "padj",
+                    "log2FC", "-log10(padj)", "Kdm5c -/Y vs +/Y Males")
+v3
+
+# WT_M vs WT_F
+v4 <- myvolcano_fxn(WT_M_vs_WT_F_imp , "log2FoldChange", "padj",
+                    "log2FC", "-log10(padj)", "WT Males vs Females")
+v4
+
+
+# =================
+# New volcano plot code
+# =================
+library(ggplot2)
+myvolcanoplot <- ggplot(data = KO_M_vs_WT_M_imp, aes(x = log2FoldChange, y = -log10(padj))) +
+  geom_vline(xintercept = c(-0.6, 0.6), col = "gray", linetype = 'dashed') +
+  geom_hline(yintercept = -log10(0.05), col = "gray", linetype = 'dashed') +
+  geom_point(size = 2) +
+  scale_color_manual(values = c("#00AFBB", "grey", "#bb0c00"), # to set the colours of our variable
+                     labels = c("Downregulated", "Not significant", "Upregulated")) + # to set the labels in case we want to overwrite the categories from the dataframe (UP, DOWN, NO)
+  coord_cartesian(ylim = c(0, 50), xlim = c(-8, 8)) + # since some genes can have minuslog10padj of inf, we set these limits
+  labs(color = 'Severe', #legend_title,<br />
+       x = expression("log"[2]*"FC"), y = expression("-log"[10]*"p-value")) +
+  scale_x_continuous(breaks = seq(-10, 10, 2)) + # to customise the breaks in the x axis
+  ggtitle('Kdm5c -/Y vs +/Y') #+ # Plot title
+  #geom_text_repel(max.overlaps = Inf) # To show all labels 
+myvolcanoplot
