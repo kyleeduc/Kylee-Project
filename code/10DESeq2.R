@@ -109,14 +109,14 @@ metadata <- data.frame(Sample = ordered_columns) %>%
     Genotype = str_extract(Sample, "^[^0-9]+"),   # WT_M, WT_F, HT_F, KO_M
     Sex = str_extract(Sample, "[MF]"),           # M or F
     
-    Litter = c("C", "B", "B",
-               "B", "B", "C",
-               "B", "C", "B",
-               "C", "B", "C"),
-    Batch = c("A", "A", "B",
-              "A", "B", "B",
-              "A", "A", "B",
-              "B", "B", "A")
+    Litter = c("B", "A", "A",
+               "A", "A", "B",
+               "A", "B", "A",
+               "B", "A", "B"),
+    Batch = c("1", "1", "2",
+              "1", "2", "2",
+              "1", "1", "2",
+              "2", "2", "1")
   )
 
 # Use the below information to correctly assign values to each sample
@@ -234,22 +234,13 @@ PCApalette <- c("WT" = "steelblue2", "mut" = "mediumorchid2")
 # This normalizes the count data for visualization like PCA
 vsd <- vst(dds, blind = TRUE)
 
-# Create PCA data using genotype as the grouping variable
-pca_data <- plotPCA(vsd, intgroup = c("genotype"), returnData = TRUE)
+# Create PCA data and keeping all interesting metadata columns as the grouping variables
+pca_data <- plotPCA(vsd, intgroup = c("genotype", "Batch", "Litter", "Sex", "Sample"), returnData = TRUE)
 
 # Save percent variance explained by PC1 and PC2
 percentVar <- round(100 * attr(pca_data, "percentVar"))
 
-# Add metadata columns back in for plotting options
-pca_data <- data.frame(
-  pca_data,
-  Sample = metadata$Sample,
-  Sex = metadata$Sex,
-  Batch = metadata$Batch,
-  Litter = metadata$Litter
-)
-
-# Create PCA plot
+# Create PCA plot contrasting WT and Mutant samples
 PCA_plot <- ggplot(pca_data, aes(PC1, PC2, color = genotype, shape = Sex)) +
   geom_point(size = 4.5) +
   ggtitle("PCA Plot of WT vs Mutant Samples") +
@@ -262,6 +253,23 @@ PCA_plot
 
 # Save the PCA plot
 ggsave("figures/WT_vs_Mutant_PCAplot.pdf", plot = PCA_plot, width = 5, height = 4)
+
+# Create PCA plot to check for litter or batch effects
+# For when PCA is coloring based on the two litters
+PCApalette <- c("A" = "gray1", "B" = "grey65")
+
+PCA_plot <- ggplot(pca_data, aes(PC1, PC2, color = Litter, shape = Batch)) + # Can change back to color for genotype and shape for Sex
+  geom_point(size = 4.5) +
+  ggtitle("PCA Plot of Mice Litter and RNA Extraction Batch") + # PCA Plot of WT vs Mutant Samples
+  scale_color_manual(values = PCApalette) +
+  xlab(paste0("PC1: ", percentVar[1], "% variance")) +
+  ylab(paste0("PC2: ", percentVar[2], "% variance")) +
+  theme_classic()
+
+PCA_plot
+
+# Save the PCA plot
+ggsave("figures/Litter_and_Batch_PCAplot.pdf", plot = PCA_plot, width = 5, height = 4)
 
 # =========================================================================
 # PCA PLOT WITH SAMPLE NAMES
