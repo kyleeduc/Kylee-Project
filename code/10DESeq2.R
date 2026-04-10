@@ -422,7 +422,7 @@ resultsNames(dds)
 res_mut_vs_WT_shrunk <- lfcShrink(
   dds,
   coef = "genotype_mut_vs_WT",
-  type = "apeglm"
+  type = "ashr" # changed to ashr, IV 10 am, 4/10/26
 )
 
 # Convert to data frame and add gene names
@@ -442,26 +442,54 @@ resultsNames(dds_group)
 
 # Shrink log2 fold changes for KO_M vs WT_M
 # May need to install - BiocManager::install("ashr")
-res_KO_M_vs_WT_M_shrunk <- lfcShrink(
-  dds_group,
-  contrast = c("Genotype", "KO_M", "WT_M"),
-  type = "ashr"
-)
+res_unshrunk <- results(dds_group,
+                        contrast=c("Genotype","KO_M","WT_M"),
+                        alpha=PADJ) # specifying PADJ
 
+res_KO_M_vs_WT_M_shrunk <- lfcShrink(dds_group,
+                                     contrast=c("Genotype","KO_M","WT_M"),
+                                     res=res_unshrunk,
+                                     type="ashr")
 
 # Shrink log2 fold changes for HT_F vs WT_F
-res_HT_F_vs_WT_F_shrunk <- lfcShrink(
-  dds_group,
-  contrast = c("Genotype", "HT_F", "WT_F"),
-  type = "ashr"
-)
+res_unshrunk <- results(dds_group,
+                        contrast=c("Genotype","HT_F","WT_F"),
+                        alpha=PADJ) # specifying PADJ
+
+res_HT_F_vs_WT_F_shrunk <- lfcShrink(dds_group,
+                                     contrast=c("Genotype","HT_F","WT_F"),
+                                     res=res_unshrunk,
+                                     type="ashr")
 
 # Shrink log2 fold changes for KO_M vs HT_F
-res_KO_M_vs_HT_F_shrunk <- lfcShrink(
-  dds_group,
-  contrast = c("Genotype", "KO_M", "HT_F"),
-  type = "ashr"
-)
+res_unshrunk <- results(dds_group,
+                        contrast=c("Genotype","KO_M","HT_F"),
+                        alpha=PADJ) # specifying PADJ
+
+res_KO_M_vs_HT_F_shrunk <- lfcShrink(dds_group,
+                                     contrast=c("Genotype","KO_M","HT_F"),
+                                     res=res_unshrunk,
+                                     type="ashr")
+
+# Shrink log2 fold changes for WT_F vs WT_M
+res_unshrunk <- results(dds_group,
+                        contrast=c("Genotype","WT_F","WT_M"),
+                        alpha=PADJ) # specifying PADJ
+
+res_WT_F_vs_WT_M_shrunk <- lfcShrink(dds_group,
+                                     contrast=c("Genotype","WT_F","WT_M"),
+                                     res=res_unshrunk,
+                                     type="ashr")
+
+# Shrink log2 fold changes for WT_M vs WT_F (converse of above)
+res_unshrunk <- results(dds_group,
+                        contrast=c("Genotype","WT_M","WT_F"),
+                        alpha=PADJ) # specifying PADJ
+
+res_WT_M_vs_WT_F_shrunk <- lfcShrink(dds_group,
+                                     contrast=c("Genotype","WT_M","WT_F"),
+                                     res=res_unshrunk,
+                                     type="ashr")
 
 # Convert each to data frame and add gene names
 res_KO_M_vs_WT_M_shrunk_df <- as.data.frame(res_KO_M_vs_WT_M_shrunk)
@@ -473,10 +501,18 @@ res_HT_F_vs_WT_F_shrunk_df$Gene_Name <- rownames(res_HT_F_vs_WT_F_shrunk_df)
 res_KO_M_vs_HT_F_shrunk_df <- as.data.frame(res_KO_M_vs_HT_F_shrunk)
 res_KO_M_vs_HT_F_shrunk_df$Gene_Name <- rownames(res_KO_M_vs_HT_F_shrunk_df)
 
+res_WT_F_vs_WT_M_shrunk_df <- as.data.frame(res_WT_F_vs_WT_M_shrunk)
+res_WT_F_vs_WT_M_shrunk_df$Gene_Name <- rownames(res_WT_F_vs_WT_M_shrunk_df)
+
+res_WT_M_vs_WT_F_shrunk_df <- as.data.frame(res_WT_M_vs_WT_F_shrunk)
+res_WT_M_vs_WT_F_shrunk_df$Gene_Name <- rownames(res_WT_M_vs_WT_F_shrunk_df)
+
 # Save shrunk results tables
 write_csv(res_KO_M_vs_WT_M_shrunk_df, "data/processed/DESeq2_KO_M_vs_WT_M_shrunk.csv")
 write_csv(res_HT_F_vs_WT_F_shrunk_df, "data/processed/DESeq2_HT_F_vs_WT_F_shrunk.csv")
 write_csv(res_KO_M_vs_HT_F_shrunk_df, "data/processed/DESeq2_KO_M_vs_HT_F_shrunk.csv")
+write_csv(res_WT_F_vs_WT_M_shrunk_df, "data/processed/DESeq2_WT_F_vs_WT_M_shrunk.csv")
+write_csv(res_WT_M_vs_WT_F_shrunk_df, "data/processed/DESeq2_WT_M_vs_WT_F_shrunk.csv")
 
 
 # =========================================================================
@@ -507,29 +543,29 @@ res_KO_M_vs_HT_F_df <- as.data.frame(res_KO_M_vs_HT_F)
 res_KO_M_vs_HT_F_df$Gene_Name <- rownames(res_KO_M_vs_HT_F_df)
 write_csv(res_KO_M_vs_HT_F_df, "data/processed/DESeq2_KO_M_vs_HT_F_unshrunk.csv")
 
-# =========================================================================
-# MA PLOTS
-# =========================================================================
-
-# MA plot for mut vs WT
-pdf("figures/MA_mut_vs_WT.pdf", width = 6, height = 5)
-plotMA(res_mut_vs_WT_shrunk, ylim = c(-5, 5), main = "MA Plot: Mut vs WT")
-dev.off()
-
-# MA plot for KO_M vs WT_M
-pdf("figures/MA_KO_M_vs_WT_M.pdf", width = 6, height = 5)
-plotMA(res_KO_M_vs_WT_M_shrunk, ylim = c(-5, 5), main = "MA Plot: KO_M vs WT_M")
-dev.off()
-
-# MA plot for HT_F vs WT_F
-pdf("figures/MA_HT_F_vs_WT_F.pdf", width = 6, height = 5)
-plotMA(res_HT_F_vs_WT_F_shrunk, ylim = c(-5, 5), main = "MA Plot: HT_F vs WT_F")
-dev.off()
-
-# MA plot for KO_M vs HT_F
-pdf("figures/MA_KO_M_vs_HT_F.pdf", width = 6, height = 5)
-plotMA(res_KO_M_vs_HT_F_shrunk, ylim = c(-5, 5), main = "MA Plot: KO_M vs HT_F")
-dev.off()
+# # =========================================================================
+# # MA PLOTS
+# # =========================================================================
+# 
+# # MA plot for mut vs WT
+# pdf("figures/MA_mut_vs_WT.pdf", width = 6, height = 5)
+# plotMA(res_mut_vs_WT_shrunk, ylim = c(-5, 5), main = "MA Plot: Mut vs WT")
+# dev.off()
+# 
+# # MA plot for KO_M vs WT_M
+# pdf("figures/MA_KO_M_vs_WT_M.pdf", width = 6, height = 5)
+# plotMA(res_KO_M_vs_WT_M_shrunk, ylim = c(-5, 5), main = "MA Plot: KO_M vs WT_M")
+# dev.off()
+# 
+# # MA plot for HT_F vs WT_F
+# pdf("figures/MA_HT_F_vs_WT_F.pdf", width = 6, height = 5)
+# plotMA(res_HT_F_vs_WT_F_shrunk, ylim = c(-5, 5), main = "MA Plot: HT_F vs WT_F")
+# dev.off()
+# 
+# # MA plot for KO_M vs HT_F
+# pdf("figures/MA_KO_M_vs_HT_F.pdf", width = 6, height = 5)
+# plotMA(res_KO_M_vs_HT_F_shrunk, ylim = c(-5, 5), main = "MA Plot: KO_M vs HT_F")
+# dev.off()
 
 
 # =========================================================================
@@ -586,56 +622,57 @@ ma_df <- as.data.frame(res_mut_vs_WT_shrunk)
 ma_df$Gene_Name <- rownames(ma_df)
 
 ma_df <- ma_df %>%
-  mutate(
-    log10_baseMean = log10(baseMean + 1),  # avoid log(0)
-    significant = ifelse(padj < 0.05, "Significant", "Not Significant")
-  )
+  filter(!is.na(baseMean), !is.na(log2FoldChange)) %>%
+  mutate(significance = ifelse(!is.na(padj) & padj < PADJ, "padj < 0.05", "Not Significant"))
 
-ggplot(ma_df, aes(x = log10_baseMean, y = log2FoldChange, color = significant)) +
+ggplot(ma_df, aes(x = log10(baseMean + 1), y = log2FoldChange, color = significance)) +
   geom_point(alpha = 0.5) +
-  geom_hline(yintercept = 0, linetype = "dashed", color = "black") +
-  scale_color_manual(values = c("Significant" = "red", "Not Significant" = "lightgray")) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "grey40") +
+  coord_cartesian(ylim = c(-5, 5)) + # limits y-axis
+  scale_color_manual(values = c("padj < 0.05" = "red", "Not Significant" = "lightgray")) +
   theme_classic() +
-  xlab("Log10(Base Mean + 1)") +
-  ylab("Log2 Fold Change") +
-  ggtitle("MA Plot: Mut vs WT with Log10 Base Mean")
+  xlab("log10(baseMean + 1)") +
+  ylab("log2FoldChange") +
+  ggtitle("Kdm5c Mutants vs WT")
 
 ggsave("figures/MA_plot_mut_vs_WT_log10basemean.pdf", width = 6, height = 5, dpi = 300)
 
 # MA plot for KO_M vs WT_M with log10 base mean on x-axis
 ma_KO_M_df <- as.data.frame(res_KO_M_vs_WT_M_shrunk)
 ma_KO_M_df$Gene_Name <- rownames(ma_KO_M_df)
+
 ma_KO_M_df <- ma_KO_M_df %>%
-  mutate(
-    log10_baseMean = log10(baseMean + 1),
-    significant = ifelse(padj < 0.05, "Significant", "Not Significant")
-  )
-ggplot(ma_KO_M_df, aes(x = log10_baseMean, y = log2FoldChange, color = significant)) +
+  filter(!is.na(baseMean), !is.na(log2FoldChange)) %>%
+  mutate(significance = ifelse(!is.na(padj) & padj < PADJ, "padj < 0.05", "Not Significant"))
+
+ggplot(ma_KO_M_df, aes(x = log10(baseMean + 1), y = log2FoldChange, color = significance)) +
   geom_point(alpha = 0.5) +
-  geom_hline(yintercept = 0, linetype = "dashed", color = "black") +
-  scale_color_manual(values = c("Significant" = "red", "Not Significant" = "lightgray")) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "grey40") +
+  coord_cartesian(ylim = c(-5, 5)) + # limits y-axis
+  scale_color_manual(values = c("padj < 0.05" = "red", "Not Significant" = "lightgray")) +
   theme_classic() +
-  xlab("Log10(Base Mean + 1)") +
-  ylab("Log2 Fold Change") +
-  ggtitle("MA Plot: KO_M vs WT_M with Log10 Base Mean")
+  xlab("log10(baseMean + 1)") +
+  ylab("log2FoldChange") +
+  ggtitle("Kdm5c -/Y vs WT +/Y Males")
 ggsave("figures/MA_plot_KO_M_vs_WT_M_log10basemean.pdf", width = 6, height = 5, dpi = 300)
 
 # MA plot for HT_F vs WT_F with log10 base mean on x-axis
 ma_HT_F_df <- as.data.frame(res_HT_F_vs_WT_F_shrunk)
 ma_HT_F_df$Gene_Name <- rownames(ma_HT_F_df)
+
 ma_HT_F_df <- ma_HT_F_df %>%
-  mutate(
-    log10_baseMean = log10(baseMean + 1),
-    significant = ifelse(padj < 0.05, "Significant", "Not Significant")
-  )
-ggplot(ma_HT_F_df, aes(x = log10_baseMean, y = log2FoldChange, color = significant)) +
+  filter(!is.na(baseMean), !is.na(log2FoldChange)) %>%
+  mutate(significance = ifelse(!is.na(padj) & padj < PADJ, "padj < 0.05", "Not Significant"))
+
+ggplot(ma_HT_F_df, aes(x = log10(baseMean + 1), y = log2FoldChange, color = significance)) +
   geom_point(alpha = 0.5) +
-  geom_hline(yintercept = 0, linetype = "dashed", color = "black") +
-  scale_color_manual(values = c("Significant" = "red", "Not Significant" = "lightgray")) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "grey40") +
+  coord_cartesian(ylim = c(-5, 5)) + # limits y-axis
+  scale_color_manual(values = c("padj < 0.05" = "red", "Not Significant" = "lightgray")) +
   theme_classic() +
-  xlab("Log10(Base Mean + 1)") +
-  ylab("Log2 Fold Change") +
-  ggtitle("MA Plot: HT_F vs WT_F with Log10 Base Mean")
+  xlab("log10(baseMean + 1)") +
+  ylab("log2FoldChange") +
+  ggtitle("Kdm5c +/- vs WT +/+ Females")
 ggsave("figures/MA_plot_HT_F_vs_WT_F_log10basemean.pdf", width = 6, height = 5, dpi = 300)
 
 # MA plot for KO_M vs HT_F with log10 base mean on x-axis
@@ -643,41 +680,36 @@ ma_KO_M_vs_HT_F_df <- as.data.frame(res_KO_M_vs_HT_F_shrunk)
 ma_KO_M_vs_HT_F_df$Gene_Name <- rownames(ma_KO_M_vs_HT_F_df)
 
 ma_KO_M_vs_HT_F_df <- ma_KO_M_vs_HT_F_df %>%
-  mutate(
-    log10_baseMean = log10(baseMean + 1),
-    significant = ifelse(padj < 0.05, "Significant", "Not Significant")
-  )
-ggplot(ma_KO_M_vs_HT_F_df, aes(x = log10_baseMean, y = log2FoldChange, color = significant)) +
+  filter(!is.na(baseMean), !is.na(log2FoldChange)) %>%
+  mutate(significance = ifelse(!is.na(padj) & padj < PADJ, "padj < 0.05", "Not Significant"))
+
+ggplot(ma_KO_M_vs_HT_F_df, aes(x = log10(baseMean + 1), y = log2FoldChange, color = significance)) +
   geom_point(alpha = 0.5) +
-  geom_hline(yintercept = 0, linetype = "dashed", color = "black") +
-  scale_color_manual(values = c("Significant" = "red", "Not Significant" = "lightgray")) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "grey40") +
+  coord_cartesian(ylim = c(-5, 5)) + # limits y-axis
+  scale_color_manual(values = c("padj < 0.05" = "red", "Not Significant" = "lightgray")) +
   theme_classic() +
-  xlab("Log10(Base Mean + 1)") +
-  ylab("Log2 Fold Change") +
-  ggtitle("MA Plot: KO_M vs HT_F with Log10 Base Mean")
+  xlab("log10(baseMean + 1)") +
+  ylab("log2FoldChange") +
+  ggtitle("Kdm5c -/Y Males vs Kdm5c +/- Females")
 ggsave("figures/MA_plot_KO_M_vs_HT_F_log10basemean.pdf", width = 6, height = 5, dpi = 300)
 
 # MA plot for WT_M vs WT_F with log10 base mean on x-axis
-res_WT_F_vs_WT_M_shrunk <- lfcShrink(
-  dds_group,
-  contrast = c("Genotype", "WT_F", "WT_M"),
-  type = "ashr"
-)
+ma_WT_M_vs_WT_F_df <- as.data.frame(res_WT_M_vs_WT_F_shrunk)
+ma_WT_M_vs_WT_F_df$Gene_Name <- rownames(ma_WT_M_vs_WT_F_df)
 
-ma_WT_F_vs_WT_M_df <- as.data.frame(res_WT_F_vs_WT_M_shrunk)
-ma_WT_F_vs_WT_M_df$Gene_Name <- rownames(ma_WT_F_vs_WT_M_df)
-ma_WT_F_vs_WT_M_df <- ma_WT_F_vs_WT_M_df %>%
-  mutate(
-    log10_baseMean = log10(baseMean + 1),
-    significant = ifelse(padj < 0.05, "Significant", "Not Significant")
-  )
-ggplot(ma_WT_F_vs_WT_M_df, aes(x = log10_baseMean, y = log2FoldChange, color = significant)) +
+ma_WT_M_vs_WT_F_df <- ma_WT_M_vs_WT_F_df %>%
+  filter(!is.na(baseMean), !is.na(log2FoldChange)) %>%
+  mutate(significance = ifelse(!is.na(padj) & padj < PADJ, "padj < 0.05", "Not Significant"))
+
+ggplot(ma_WT_M_vs_WT_F_df, aes(x = log10(baseMean + 1), y = log2FoldChange, color = significance)) +
   geom_point(alpha = 0.5) +
-  geom_hline(yintercept = 0, linetype = "dashed", color = "black") +
-  scale_color_manual(values = c("Significant" = "red", "Not Significant" = "lightgray")) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "grey40") +
+  coord_cartesian(ylim = c(-5, 5)) + # limits y-axis
+  scale_color_manual(values = c("padj < 0.05" = "red", "Not Significant" = "lightgray")) +
   theme_classic() +
-  xlab("Log10(Base Mean + 1)") +
-  ylab("Log2 Fold Change") +
-  ggtitle("MA Plot: WT_F vs WT_M with Log10 Base Mean")
-ggsave("figures/MA_plot_WT_F_vs_WT_M_log10basemean.pdf", width = 6, height = 5, dpi = 300)
+  xlab("log10(baseMean + 1)") +
+  ylab("log2FoldChange") +
+  ggtitle("WT +/Y Males vs WT +/+ Females")
+ggsave("figures/MA_plot_WT_M_vs_WT_F_log10basemean.pdf", width = 6, height = 5, dpi = 300)
 
