@@ -158,5 +158,129 @@ for (genotype in genotypes) {
   })
 }
 
+# =========================================================================
+# BEGIN VIOLIN PLOT
+# =========================================================================
 
+# Calculate SD + range
+genotypes <- c("WT_M", "WT_F", "HT_F", "KO_M")
+stats_results <- data.frame(Gene_Name = rownames(mat))
+
+for (genotype in genotypes) {
+  aer_cols <- grep(paste0("^", genotype, "[0-9]+_AER$"), colnames(mat), value = TRUE)
+  
+  stats_results[[paste0(genotype, "_SD")]] <- apply(mat[, aer_cols, drop = FALSE], 1, function(x) {
+    x <- as.numeric(x)
+    if (all(is.na(x))) NA else sd(x, na.rm = TRUE)
+  })
+  
+  stats_results[[paste0(genotype, "_Range")]] <- apply(mat[, aer_cols, drop = FALSE], 1, function(x) {
+    x <- as.numeric(x)
+    if (all(is.na(x))) NA else max(x, na.rm = TRUE) - min(x, na.rm = TRUE)
+  })
+}
+
+# Rank genes by strongest variability across ANY genotype
+stats_results <- stats_results %>%
+  mutate(
+    Max_SD = pmax(WT_M_SD, WT_F_SD, HT_F_SD, KO_M_SD, na.rm = TRUE),
+    Max_Range = pmax(WT_M_Range, WT_F_Range, HT_F_Range, KO_M_Range, na.rm = TRUE)
+  ) %>%
+  arrange(desc(Max_SD))
+
+# Select top 5 genes
+top_genes <- stats_results %>%
+  slice(1:5) %>%
+  pull(Gene_Name)
+
+top_genes
+
+plot_data <- imprinting_data %>%
+  filter(Gene_Name %in% top_genes) %>%
+  pivot_longer(
+    cols = all_of(ordered_aer_columns),
+    names_to = "Sample",
+    values_to = "AER"
+  ) %>%
+  mutate(
+    Sample = sub("_AER$", "", Sample),
+    Genotype = case_when(
+      str_detect(Sample, "^WT_M") ~ "WT_M",
+      str_detect(Sample, "^WT_F") ~ "WT_F",
+      str_detect(Sample, "^HT_F") ~ "HT_F",
+      str_detect(Sample, "^KO_M") ~ "KO_M"
+    ),
+    Genotype = factor(Genotype, levels = c("WT_M", "WT_F", "HT_F", "KO_M")),
+    Gene_Name = factor(Gene_Name, levels = top_genes)
+  )
+
+ggplot(plot_data, aes(x = Genotype, y = AER)) +
+  geom_violin(trim = FALSE, fill = "lightgray", na.rm = TRUE) +
+  geom_jitter(width = 0.08, size = 2, alpha = 0.9, na.rm = TRUE) +
+  facet_wrap(~ Gene_Name, ncol = 1) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  labs(
+    title = "Genes with highest allelic variability (flipping behavior)",
+    x = "Genotype",
+    y = "Allelic Expression Ratio (AER)"
+  ) +
+  theme_classic() +
+  theme(
+    strip.text = element_text(face = "italic"),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+
+ggsave("figures/violinplot_high_variability_genes_SDandRange.pdf", width = 7, height = 12)
+
+# =========================================================================
+# VIOLIN PLOT - DETERMINE MOST VARIABLE GENES BY COEFFICIENT OF VARIATION, PLOT AER VALUES
+# =========================================================================
+
+cv_long <- cv_results %>%
+  pivot_longer(
+    cols = ends_with("_CV"),
+    names_to = "Genotype",
+    values_to = "CV"
+  ) %>%
+  mutate(
+    Abs_CV = abs(CV)
+  )
+
+top_cv_genes <- cv_long %>%
+  filter(!is.na(CV)) %>%
+  arrange(desc(Abs_CV)) %>%
+  slice(1:10)
+
+top_cv_genes
+
+plot_data <- imprinting_data %>%
+  filter(Gene_Name %in% top_cv_genes) %>%
+  pivot_longer(
+    cols = all_of(ordered_aer_columns),
+    names_to = "Sample",
+    values_to = "AER"
+  ) %>%
+  mutate(
+    Sample = sub("_AER$", "", Sample),
+    Genotype = case_when(
+      str_detect(Sample, "^WT_M") ~ "WT_M",
+      str_detect(Sample, "^WT_F") ~ "WT_F",
+      str_detect(Sample, "^HT_F") ~ "HT_F",
+      str_detect(Sample, "^KO_M") ~ "KO_M"
+    ),
+    Genotype = factor(Genotype, levels = c("WT_M", "WT_F", "HT_F", "KO_M")),
+    Gene_Name = factor(Gene_Name, levels = top_genes)
+  )
+
+ggplot(plot_data, aes(x = Genotype, y = AER)) +
+  geom_violin(trim = FALSE, fill = "lightgray", na.rm = TRUE) +
+  geom_jitter(width = 0.08, size = 2, alpha = 0.9) +
+  facet_wrap(~ Gene_Name, ncol = 1) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  labs(
+    title = "Genes with highest coefficient of variation (AER)",
+    x = "Genotype",
+    y = "Allelic Expression Ratio (AER)"
+  ) +
+  theme_classic()
 
