@@ -43,14 +43,35 @@ imprinting_analysis_clean <- imprinting_analysis_clean %>%
   mutate(Paternally_Imprinted_Mice_Count = sum(c_across(ends_with("_ImprintStatus")) == "Paternally Imprinted", na.rm = TRUE)) %>%
   ungroup()
 
-# Create a column called "Overall_Expression_Status" that is "Paternal" if all imprinted mice are maternally imprinted, "Maternal" if all imprinted mice are paternally imprinted, "Not Imprinted" if no mice are imprinted, and "Inconsistent" if there is a mix of maternally and paternally imprinted mice
+# # Create a column called "Overall_Expression_Status" that is "Paternal" if all imprinted mice are maternally imprinted, "Maternal" if all imprinted mice are paternally imprinted, "Not Imprinted" if no mice are imprinted, and "Inconsistent" if there is a mix of maternally and paternally imprinted mice
+# imprinting_analysis_clean <- imprinting_analysis_clean %>%
+#   mutate(Overall_Expression_Status = case_when(
+#     Maternally_Imprinted_Mice_Count == Imprinted_Mice_Count & Imprinted_Mice_Count > 0 ~ "Paternal",
+#     Paternally_Imprinted_Mice_Count == Imprinted_Mice_Count & Imprinted_Mice_Count > 0 ~ "Maternal",
+#     Imprinted_Mice_Count == 0 ~ "Not Imprinted",
+#     TRUE ~ "Inconsistent"
+#   ))
+
+# Determines Overall_Expression_Status based on whether all 6 WT mice are imprinted
 imprinting_analysis_clean <- imprinting_analysis_clean %>%
-  mutate(Overall_Expression_Status = case_when(
-    Maternally_Imprinted_Mice_Count == Imprinted_Mice_Count & Imprinted_Mice_Count > 0 ~ "Paternal",
-    Paternally_Imprinted_Mice_Count == Imprinted_Mice_Count & Imprinted_Mice_Count > 0 ~ "Maternal",
-    Imprinted_Mice_Count == 0 ~ "Not Imprinted",
-    TRUE ~ "Inconsistent"
-  ))
+  rowwise() %>%
+  mutate(
+    Overall_Expression_Status = {
+      wt <- trimws(as.character(c_across(matches("^WT.*_ImprintStatus$"))))
+      
+      imprinted_labels <- c("Maternally Imprinted", "Paternally Imprinted")
+      n_imprinted <- sum(wt %in% imprinted_labels, na.rm = TRUE)
+      
+      case_when(
+        n_imprinted < 6 ~ "Not Imprinted",
+        all(wt == "Maternally Imprinted") ~ "Paternal",
+        all(wt == "Paternally Imprinted") ~ "Maternal",
+        n_imprinted == 6 ~ "Inconsistent",
+        TRUE ~ "Not Imprinted"
+      )
+    }
+  ) %>%
+  ungroup()
 
 # Calculate the percent of imprinted mice that are maternally imprinted and create a column for this value
 imprinting_analysis_clean <- imprinting_analysis_clean %>%

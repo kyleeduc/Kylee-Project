@@ -1,0 +1,4 @@
+
+# Ignore Adobe temp/recovery files
+figures/~ai-*.tmp
+*Recovered].ai
