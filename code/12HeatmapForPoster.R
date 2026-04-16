@@ -235,52 +235,52 @@ ggsave("figures/violinplot_high_variability_genes_SDandRange.pdf", width = 7, he
 # =========================================================================
 # VIOLIN PLOT - DETERMINE MOST VARIABLE GENES BY COEFFICIENT OF VARIATION, PLOT AER VALUES
 # =========================================================================
-
-cv_long <- cv_results %>%
-  pivot_longer(
-    cols = ends_with("_CV"),
-    names_to = "Genotype",
-    values_to = "CV"
-  ) %>%
-  mutate(
-    Abs_CV = abs(CV)
-  )
-
-top_cv_genes <- cv_long %>%
-  filter(!is.na(CV)) %>%
-  arrange(desc(Abs_CV)) %>%
-  slice(1:10)
-
-top_cv_genes
-
-plot_data <- imprinting_data %>%
-  filter(Gene_Name %in% top_cv_genes) %>%
-  pivot_longer(
-    cols = all_of(ordered_aer_columns),
-    names_to = "Sample",
-    values_to = "AER"
-  ) %>%
-  mutate(
-    Sample = sub("_AER$", "", Sample),
-    Genotype = case_when(
-      str_detect(Sample, "^WT_M") ~ "WT_M",
-      str_detect(Sample, "^WT_F") ~ "WT_F",
-      str_detect(Sample, "^HT_F") ~ "HT_F",
-      str_detect(Sample, "^KO_M") ~ "KO_M"
-    ),
-    Genotype = factor(Genotype, levels = c("WT_M", "WT_F", "HT_F", "KO_M")),
-    Gene_Name = factor(Gene_Name, levels = top_genes)
-  )
-
-ggplot(plot_data, aes(x = Genotype, y = AER)) +
-  geom_violin(trim = FALSE, fill = "lightgray", na.rm = TRUE) +
-  geom_jitter(width = 0.08, size = 2, alpha = 0.9) +
-  facet_wrap(~ Gene_Name, ncol = 1) +
-  geom_hline(yintercept = 0, linetype = "dashed") +
-  labs(
-    title = "Genes with highest coefficient of variation (AER)",
-    x = "Genotype",
-    y = "Allelic Expression Ratio (AER)"
-  ) +
-  theme_classic()
-
+# 
+# cv_long <- cv_results %>%
+#   pivot_longer(
+#     cols = ends_with("_CV"),
+#     names_to = "Genotype",
+#     values_to = "CV"
+#   ) %>%
+#   mutate(
+#     Abs_CV = abs(CV)
+#   )
+# 
+# top_cv_genes <- cv_long %>%
+#   filter(!is.na(CV)) %>%
+#   arrange(desc(Abs_CV)) %>%
+#   slice(1:10)
+# 
+# top_cv_genes
+# 
+# plot_data <- imprinting_data %>%
+#   filter(Gene_Name %in% top_cv_genes) %>%
+#   pivot_longer(
+#     cols = all_of(ordered_aer_columns),
+#     names_to = "Sample",
+#     values_to = "AER"
+#   ) %>%
+#   mutate(
+#     Sample = sub("_AER$", "", Sample),
+#     Genotype = case_when(
+#       str_detect(Sample, "^WT_M") ~ "WT_M",
+#       str_detect(Sample, "^WT_F") ~ "WT_F",
+#       str_detect(Sample, "^HT_F") ~ "HT_F",
+#       str_detect(Sample, "^KO_M") ~ "KO_M"
+#     ),
+#     Genotype = factor(Genotype, levels = c("WT_M", "WT_F", "HT_F", "KO_M")),
+#     Gene_Name = factor(Gene_Name, levels = top_genes)
+#   )
+# 
+# ggplot(plot_data, aes(x = Genotype, y = AER)) +
+#   geom_violin(trim = FALSE, fill = "lightgray", na.rm = TRUE) +
+#   geom_jitter(width = 0.08, size = 2, alpha = 0.9) +
+#   facet_wrap(~ Gene_Name, ncol = 1) +
+#   geom_hline(yintercept = 0, linetype = "dashed") +
+#   labs(
+#     title = "Genes with highest coefficient of variation (AER)",
+#     x = "Genotype",
+#     y = "Allelic Expression Ratio (AER)"
+#   ) +
+#   theme_classic()
+# 
