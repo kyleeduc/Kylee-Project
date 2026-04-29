@@ -190,8 +190,11 @@ stats_results <- stats_results %>%
 
 # Select top 5 genes
 top_genes <- stats_results %>%
-  slice(1:5) %>%
+  slice(1:7) %>%
   pull(Gene_Name)
+
+# Now pick genes 1, 2, and 7 ONLY
+top_genes <- top_genes[c(1, 2, 7)]
 
 top_genes
 
@@ -230,7 +233,7 @@ ggplot(plot_data, aes(x = Genotype, y = AER)) +
     axis.text.x = element_text(angle = 45, hjust = 1)
   )
 
-ggsave("figures/violinplot_high_variability_genes_SDandRange.pdf", width = 7, height = 12)
+ggsave("figures/violinplot_high_variability_genes_SDandRange.pdf", width = 7, height = 6)
 
 # =========================================================================
 # VIOLIN PLOT - DETERMINE MOST VARIABLE GENES BY COEFFICIENT OF VARIATION, PLOT AER VALUES
@@ -284,3 +287,17 @@ ggsave("figures/violinplot_high_variability_genes_SDandRange.pdf", width = 7, he
 #   ) +
 #   theme_classic()
 # 
+
+# Create a column in 
+
+# ==========================================================================
+# FIND FLIPPING BEHAVIOR
+# ==========================================================================
+
+stats_results$Global_Range <- apply(mat, 1, function(x) {
+  x <- as.numeric(x)
+  if (all(is.na(x))) NA else max(x, na.rm = TRUE) - min(x, na.rm = TRUE)
+})
+
+stats_results <- stats_results %>%
+  arrange(desc(Global_Range))
