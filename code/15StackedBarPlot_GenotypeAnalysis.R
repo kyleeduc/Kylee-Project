@@ -271,11 +271,11 @@ run_group_analysis <- function(aer_columns, group_name) {
     filename = paste0(
       "figures/",
       str_replace_all(group_name, "[^A-Za-z0-9]", "_"),
-      "_Stacked_Barplot.pdf"
+      "_Stacked_Barplot.jpg"
     ),
     plot = p,
     width = 11,
-    height = 8
+    height = 5
   )
   
   # --------------------------------------------------------------
