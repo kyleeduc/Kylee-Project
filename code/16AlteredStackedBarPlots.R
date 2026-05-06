@@ -5,9 +5,7 @@
 #   data/processed/HIP_RNA-AlSp_parentalASE_imprinting_analysis.csv
 #
 # Output:
-#   figures/Male_WT_vs_KO_Stacked_Barplot.pdf
-#   figures/Female_WT_vs_HT_Stacked_Barplot.pdf
-#   figures/WT_M_vs_WT_F_Stacked_Barplot.pdf
+#   figures/WT_Only_Stacked_Barplot_Imprinting_Classification.jpg
 ############################################################################
 
 # Load library
