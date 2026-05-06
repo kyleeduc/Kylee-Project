@@ -68,13 +68,17 @@ gene_classification <- long_data %>%
     Classification = case_when(
       n_imprinted == 0 ~ "Not Imprinted",
       
-      Expressed_Allele == "Maternal" & n_maternal > 0 & n_paternal == 0 ~ "Consistent",
-      Expressed_Allele == "Paternal" & n_paternal > 0 & n_maternal == 0 ~ "Consistent",
+      # Fix to all 12 mice are consistent with published allele
+      Expressed_Allele == "Maternal" & n_maternal == 12 ~ "Consistent",
+      Expressed_Allele == "Paternal" & n_paternal == 12 ~ "Consistent",
       
-      Expressed_Allele == "Maternal" & n_maternal == 0 & n_paternal > 0 ~ "Opposite",
-      Expressed_Allele == "Paternal" & n_paternal == 0 & n_maternal > 0 ~ "Opposite",
+      # Fix to all 12 mice are opposite to published allele
+      Expressed_Allele == "Maternal" & n_paternal == 12 ~ "Opposite",
+      Expressed_Allele == "Paternal" & n_maternal == 12 ~ "Opposite",
       
-      n_maternal > 0 & n_paternal > 0 ~ "Inconsistent",
+      # If there's a mix of maternal and paternal expression, or a mix of imprinted and not imprinted calls, classify as inconsistent
+      (n_maternal > 0 & n_paternal > 0) | 
+        (n_imprinted > 0 & n_not_imprinted > 0) ~ "Inconsistent",
       
       TRUE ~ "Inconsistent"
     )
@@ -116,14 +120,14 @@ stacked_barplot <- ggplot(
   ) +
   scale_fill_manual(
     values = c(
-      "Consistent" = "#4daf4a",
-      "Opposite" = "#e41a1c",
-      "Inconsistent" = "#ff7f00",
-      "Not Imprinted" = "gray70"
+      "Consistent" = "#1E4E79",
+      "Opposite" = "#FFCB05",
+      "Inconsistent" = "#2E8B57",
+      "Not Imprinted" = "#B0B0B0"
     )
   ) +
   labs(
-    title = "Observed Imprinting Status Compared to Published Expressed Allele",
+    title = "Observed Expression Status Compared to Published\nExpressed Allele for Imprinted Genes",
     x = "Published Expressed Allele",
     y = "Proportion of Genes",
     fill = "Observed Classification"
