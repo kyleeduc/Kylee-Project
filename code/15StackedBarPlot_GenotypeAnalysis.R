@@ -4,14 +4,15 @@
 # Create separate stacked barplots and Fisher's Exact Tests for:
 #   1. Male mice: WT_M vs KO_M
 #   2. Female mice: WT_F vs HT_F
+#   3. Wild-type sex comparison: WT_M vs WT_F
 #
 # The plot compares observed allele-specific expression patterns to the
 # published expressed allele for each imprinted gene.
 #
 # Categories:
-#   Consistent     = observed expressed allele matches published expressed allele
-#   Opposite       = observed expressed allele is opposite of published allele
-#   Inconsistent   = some samples are maternal, some are paternal
+#   Consistent     = all samples match the published expressed allele
+#   Opposite       = all observed expressed alleles are opposite of published data
+#   Inconsistent   = some samples are maternal, some are paternal OR some samples are imprinted and some are not
 #   Not Imprinted  = no samples pass the AER imprinting threshold
 #
 # Input:
@@ -20,6 +21,7 @@
 # Output:
 #   figures/Male_WT_vs_KO_Stacked_Barplot.pdf
 #   figures/Female_WT_vs_HT_Stacked_Barplot.pdf
+#   figures/WT_M_vs_WT_F_Stacked_Barplot.pdf
 ##############################################################################
 
 # ------------------------------------------------------------------
@@ -145,11 +147,12 @@ run_group_analysis <- function(aer_columns, group_name) {
   }
   
   # --------------------------------------------------------------
-  # Classify each gene by genotype
+  # Classify each gene within each genotype group
   # --------------------------------------------------------------
   gene_classification <- long_data %>%
     group_by(Gene_Name, Expressed_Allele, Genotype) %>%
     summarize(
+      n_total = n(),
       n_maternal = sum(Observed_Expressed_Allele == "Maternal", na.rm = TRUE),
       n_paternal = sum(Observed_Expressed_Allele == "Paternal", na.rm = TRUE),
       n_not_imprinted = sum(Observed_Expressed_Allele == "Not Imprinted", na.rm = TRUE),
@@ -158,33 +161,37 @@ run_group_analysis <- function(aer_columns, group_name) {
     ) %>%
     mutate(
       Classification = case_when(
+        
         # No samples pass the imprinting threshold
         n_imprinted == 0 ~ "Not Imprinted",
         
-        # Published maternal gene only shows maternal expression
+        # All samples match the published maternal allele
         Expressed_Allele == "Maternal" &
-          n_maternal > 0 & n_paternal == 0 ~ "Consistent",
+          n_maternal == n_total ~ "Consistent",
         
-        # Published paternal gene only shows paternal expression
+        # All samples match the published paternal allele
         Expressed_Allele == "Paternal" &
-          n_paternal > 0 & n_maternal == 0 ~ "Consistent",
+          n_paternal == n_total ~ "Consistent",
         
-        # Published maternal gene only shows paternal expression
+        # All samples are opposite of published maternal allele
         Expressed_Allele == "Maternal" &
-          n_maternal == 0 & n_paternal > 0 ~ "Opposite",
+          n_paternal == n_total ~ "Opposite",
         
-        # Published paternal gene only shows maternal expression
+        # All samples are opposite of published paternal allele
         Expressed_Allele == "Paternal" &
-          n_paternal == 0 & n_maternal > 0 ~ "Opposite",
+          n_maternal == n_total ~ "Opposite",
         
-        # Some samples are maternal, some are paternal
+        # Some samples are maternal and some are paternal
         n_maternal > 0 & n_paternal > 0 ~ "Inconsistent",
+        
+        # Some samples are imprinted and some are not imprinted
+        n_imprinted > 0 & n_not_imprinted > 0 ~ "Inconsistent",
         
         # Catch anything unexpected
         TRUE ~ "Inconsistent"
       )
     )
-  
+
   # --------------------------------------------------------------
   # Summarize data for stacked barplot
   # --------------------------------------------------------------
@@ -215,71 +222,78 @@ run_group_analysis <- function(aer_columns, group_name) {
   ) +
     geom_col(color = "black", linewidth = 0.3) +
     
-    # Add raw gene counts inside stacked bars
     geom_text(
       aes(label = n),
       position = position_stack(vjust = 0.5),
       size = 4
     ) +
     
-    # Separate WT vs KO or WT vs HT into panels
     facet_wrap(~Genotype) +
     
-    # Convert y-axis to percentages
     scale_y_continuous(
       labels = scales::percent_format(),
-      limits = c(0, 1)
+      expand = c(0, 0)
     ) +
+    coord_cartesian(ylim = c(0, 1)) +
     
-    # Manual colors for classifications
     scale_fill_manual(
       values = c(
-        "Consistent" = "#4daf4a",
-        "Opposite" = "#e41a1c",
-        "Inconsistent" = "#ff7f00",
-        "Not Imprinted" = "gray70"
+        "Consistent" = "#1E4E79",
+        "Opposite" = "#FFCB05",
+        "Inconsistent" = "#2E8B57",
+        "Not Imprinted" = "#B0B0B0"
       )
     ) +
     
     labs(
-      title = paste(group_name, "Observed Imprinting Compared to Published Expressed Allele"),
+      title = paste(
+        group_name,
+        "Observed Expression Status Compared to Published\nExpressed Allele for Imprinted Genes"
+      ),
       x = "Published Expressed Allele",
       y = "Proportion of Genes",
       fill = "Observed Classification"
     ) +
     
-    theme_classic(base_size = 14)
+    theme_classic(base_size = 14) +
+    theme(
+      plot.title = element_text(hjust = 0.5, face = "bold"),
+      strip.text = element_text(face = "bold"),
+      legend.position = "right"
+    )
   
-  # Show plot in RStudio
   print(p)
   
-  # Save plot
+  # --------------------------------------------------------------
+  # Save plot as PDF
+  # --------------------------------------------------------------
   ggsave(
     filename = paste0(
       "figures/",
       str_replace_all(group_name, "[^A-Za-z0-9]", "_"),
-      "_Stacked_Barplot.jpg"
+      "_Stacked_Barplot.pdf"
     ),
     plot = p,
     width = 11,
-    height = 5
+    height = 8
   )
   
   # --------------------------------------------------------------
   # Fisher's Exact Test
   # --------------------------------------------------------------
   # This tests whether the proportion of Consistent vs Opposite genes
-  # differs between genotypes.
+  # differs between genotype groups.
   #
-  # Example male table:
-  #          Consistent Opposite
-  #   WT          x        x
-  #   KO          x        x
-  #
-  # Inconsistent and Not Imprinted are excluded from this specific test.
+  # Inconsistent and Not Imprinted genes are excluded from this test.
+  
   fisher_data <- gene_classification %>%
     filter(Classification %in% c("Consistent", "Opposite")) %>%
-    count(Genotype, Classification)
+    count(Genotype, Classification) %>%
+    complete(
+      Genotype,
+      Classification = c("Consistent", "Opposite"),
+      fill = list(n = 0)
+    )
   
   fisher_table <- fisher_data %>%
     pivot_wider(
@@ -300,7 +314,6 @@ run_group_analysis <- function(aer_columns, group_name) {
   print(fisher_result)
   cat("====================================================\n")
   
-  # Return useful objects in case you want to inspect/export later
   return(
     list(
       long_data = long_data,
@@ -312,6 +325,7 @@ run_group_analysis <- function(aer_columns, group_name) {
     )
   )
 }
+
 
 # ------------------------------------------------------------------
 # 8. Run male comparison: WT_M vs KO_M
