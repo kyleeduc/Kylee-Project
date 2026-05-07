@@ -423,7 +423,8 @@ aer_dot_plot <- ggplot(
     axis.text.y = element_text(size = 6),
     strip.text = element_text(face = "bold"),
     legend.position = "right",
-    panel.spacing.x = grid::unit(1.4, "lines")
+    panel.spacing.x = grid::unit(1.4, "lines"),
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 0.4)
   )
 
 aer_dot_plot
