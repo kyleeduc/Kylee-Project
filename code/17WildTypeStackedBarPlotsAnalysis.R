@@ -160,7 +160,7 @@ run_stacked_barplot_comparison <- function(sample_groups, group_name) {
   write_csv(
     opposite_genes,
     paste0(
-      "figures/",
+      "data/processed/",
       str_replace_all(group_name, "[^A-Za-z0-9]", "_"),
       "_Opposite_Genes.csv"
     )
