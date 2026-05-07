@@ -1,0 +1,11 @@
+Gene_Name,Genotype,Expressed_Allele,n_maternal,n_paternal,n_not_imprinted,n_imprinted,Classification
+Hymai,WT_F,Paternal,3,0,0,3,Opposite
+Magel2,WT_F,Paternal,3,0,0,3,Opposite
+Mkrn3,WT_F,Paternal,3,0,0,3,Opposite
+Peg12,WT_F,Paternal,3,0,0,3,Opposite
+Peg3os,WT_F,Paternal,3,0,0,3,Opposite
+Grb10,HT_F,Maternal,0,3,0,3,Opposite
+Ins2,HT_F,Paternal,3,0,0,3,Opposite
+Mkrn3,HT_F,Paternal,3,0,0,3,Opposite
+Peg12,HT_F,Paternal,3,0,0,3,Opposite
+Peg3os,HT_F,Paternal,3,0,0,3,Opposite
