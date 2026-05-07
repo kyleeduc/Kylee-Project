@@ -395,7 +395,7 @@ aer_dot_plot <- ggplot(
   
   scale_color_manual(
     values = c(
-      "Maternal" = "#FFCB05",
+      "Maternal" = "#FF6090",
       "Paternal" = "#1E4E79",
       "Not Imprinted" = "#B0B0B0",
       "No Expression" = "#E6E6E6"
