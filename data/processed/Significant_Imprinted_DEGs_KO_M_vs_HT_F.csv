@@ -1,0 +1,4 @@
+Gene_Name,baseMean,log2FoldChange,lfcSE,pvalue,padj,Gene_clean,Gene,Expressed_Allele,Status,Overall_Expression_Pattern,Comparison,neg_log10_padj,Is_Imprinted,Is_Significant,Large_Fold_Change,Significant_DEG,Significant_Imprinted_DEG,Volcano_Color,Label
+Xist,25849.540469871143,-11.9608813196906,1.276198153711234,3.663607507170888e-21,2.187784283032215e-17,XIST,Xist,Paternal,Imprinted,NA,KO_M_vs_HT_F,16.659995501948888,TRUE,TRUE,TRUE,TRUE,TRUE,Significant imprinted: paternal,Xist
+Gm35612,39.522157679092594,0.5400624834977241,0.7210168092505871,6.354619360873666e-5,0.03557593932814116,GM35612,Gm35612,Maternal,Imprinted,NA,KO_M_vs_HT_F,1.4488436242122578,TRUE,TRUE,TRUE,TRUE,TRUE,Significant imprinted: maternal,Gm35612
+Tsix,37.048330643726416,-0.4514922132289976,0.6950280048189295,8.614422291339297e-5,0.04409353581409814,TSIX,Tsix,Maternal,Imprinted,NA,KO_M_vs_HT_F,1.355625074161163,TRUE,TRUE,TRUE,TRUE,TRUE,Significant imprinted: maternal,Tsix

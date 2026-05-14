@@ -1,0 +1,1 @@
+Gene_Name,baseMean,log2FoldChange,lfcSE,pvalue,padj,Gene_clean,Gene,Expressed_Allele,Status,Overall_Expression_Pattern,Comparison,neg_log10_padj,Is_Imprinted,Is_Significant,Large_Fold_Change,Significant_DEG,Significant_Imprinted_DEG,Volcano_Color,Label

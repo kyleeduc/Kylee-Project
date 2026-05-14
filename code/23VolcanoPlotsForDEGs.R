@@ -1,43 +1,22 @@
-###############################################################################
+#############################################################################
 # Author: Kylee Duczyminski
-# Purpose:
-#   Create volcano plots and violin plots from saved DESeq2 results.
+# About: Creates volcano plots for differentially expressed genes. Uses the
+#        results from DESeq2 and the ggplot2 package in R.
 #
-# Volcano plot rules:
-#   - x-threshold: |log2FC| > 0.25
-#   - y-threshold: padj < 0.05
+# Input:
+#   - A CSV file containing the results from DESeq2, including log2 fold change
+#     and adjusted p-values for each gene.
 #
-# Point coloring:
-#   - Significant imprinted maternal genes = deeppink3
-#   - Significant imprinted paternal genes = dodgerblue3
-#   - Significant non-imprinted DEGs = grey25
-#   - Small fold change genes = grey25
-#   - Not significant genes = lightgray
-#
-# Labels:
-#   - Label only significant imprinted DEGs
-#   - Label text = Gene_Name
-#
-# Inputs:
-#   data/processed/DESeq2_KO_M_vs_WT_M_shrunk.csv
-#   data/processed/DESeq2_HT_F_vs_WT_F_shrunk.csv
-#   data/processed/DESeq2_KO_M_vs_HT_F_shrunk.csv
-#   data/processed/Normalized_counts_all_samples.csv
-#   data/raw/imprinted_gene_list.csv
-#
-# Outputs:
-#   figures/Volcano_KO_M_vs_WT_M.pdf
-#   figures/Volcano_HT_F_vs_WT_F.pdf
-#   figures/Volcano_KO_M_vs_HT_F.pdf
-#   figures/Violin_Imprinted_DEGs_KO_M_vs_WT_M.pdf
-#   figures/Violin_Imprinted_DEGs_HT_F_vs_WT_F.pdf
-#   figures/Violin_Imprinted_DEGs_KO_M_vs_HT_F.pdf
-###############################################################################
+# Output:
+#   - A volcano plot saved as a PNG file, showing the relationship between log2
+#     fold change and adjusted p-values for the differentially expressed genes.
+#############################################################################
 
-# Load libraries
-library(tidyverse)
-library(ggrepel)
+# Load necessary libraries
 library(ggplot2)
+library(dplyr)
+library(ggrepel)
+library(tidyverse)
 
 # Set working directory
 setwd("/Users/kyleeduczyminski/Documents/Iwase-Lab/Kylee-Project")
@@ -112,17 +91,17 @@ imprinted_genes <- imprinted_genes %>%
 # ------------------------------------------------------------------
 
 KO_M_vs_WT_M <- read_csv(
-  "data/processed/DESeq2_KO_M_vs_WT_M_shrunk.csv",
+  "data/processed/DESeq2_TOTAL_KO_M_vs_WT_M_shrunk.csv",
   show_col_types = FALSE
 )
 
 HT_F_vs_WT_F <- read_csv(
-  "data/processed/DESeq2_HT_F_vs_WT_F_shrunk.csv",
+  "data/processed/DESeq2_TOTAL_HT_F_vs_WT_F_shrunk.csv",
   show_col_types = FALSE
 )
 
 KO_M_vs_HT_F <- read_csv(
-  "data/processed/DESeq2_KO_M_vs_HT_F_shrunk.csv",
+  "data/processed/DESeq2_TOTAL_KO_M_vs_HT_F_shrunk.csv",
   show_col_types = FALSE
 )
 
@@ -140,8 +119,7 @@ prepare_volcano_data <- function(deseq_df, comparison_name) {
   volcano_df <- deseq_df %>%
     mutate(
       Gene_Name = str_trim(Gene_Name),
-      Gene_Base = str_remove(Gene_Name, "_129$|_JF1$"),
-      Gene_clean = str_to_upper(Gene_Base)
+      Gene_clean = str_to_upper(Gene_Name)
     ) %>%
     left_join(
       imprinted_genes_clean,
@@ -166,13 +144,12 @@ prepare_volcano_data <- function(deseq_df, comparison_name) {
         Significant_Imprinted_DEG & Expressed_Allele == "Maternal" ~ "Significant imprinted: maternal",
         Significant_Imprinted_DEG & Expressed_Allele == "Paternal" ~ "Significant imprinted: paternal",
         Significant_DEG ~ "Significant DEG",
-        Is_Imprinted ~ "Imprinted but not significant",
         abs(log2FoldChange) <= LFC_CUTOFF ~ "Small fold change",
         TRUE ~ "Not significant"
       ),
       
       Label = case_when(
-        Significant_Imprinted_DEG ~ Gene_Base,
+        Significant_Imprinted_DEG ~ Gene_Name,
         TRUE ~ NA_character_
       )
     )
@@ -184,20 +161,9 @@ prepare_volcano_data <- function(deseq_df, comparison_name) {
 # 5. Prepare volcano datasets
 # ------------------------------------------------------------------
 
-volcano_KO_M_vs_WT_M <- prepare_volcano_data(
-  KO_M_vs_WT_M,
-  "KO_M_vs_WT_M"
-)
-
-volcano_HT_F_vs_WT_F <- prepare_volcano_data(
-  HT_F_vs_WT_F,
-  "HT_F_vs_WT_F"
-)
-
-volcano_KO_M_vs_HT_F <- prepare_volcano_data(
-  KO_M_vs_HT_F,
-  "KO_M_vs_HT_F"
-)
+volcano_DEGs_KO_M_vs_WT_M <- prepare_volcano_data(KO_M_vs_WT_M, "KO_M_vs_WT_M")
+volcano_DEGs_HT_F_vs_WT_F <- prepare_volcano_data(HT_F_vs_WT_F, "HT_F_vs_WT_F")
+volcano_DEGs_KO_M_vs_HT_F <- prepare_volcano_data(KO_M_vs_HT_F, "KO_M_vs_HT_F")
 
 # ------------------------------------------------------------------
 # 6. Make volcano plot function
@@ -210,8 +176,16 @@ make_volcano_plot <- function(volcano_df, title_text, output_file) {
     aes(x = log2FoldChange, y = neg_log10_padj)
   ) +
     geom_point(
+      data = volcano_df %>% filter(!Significant_Imprinted_DEG),
       aes(color = Volcano_Color),
-      alpha = 0.7,
+      alpha = 0.55,
+      size = 1.6
+    ) +
+    
+    geom_point(
+      data = volcano_df %>% filter(Significant_Imprinted_DEG),
+      aes(color = Volcano_Color),
+      alpha = 1,
       size = 1.6
     ) +
     
@@ -244,10 +218,16 @@ make_volcano_plot <- function(volcano_df, title_text, output_file) {
       values = c(
         "Significant imprinted: maternal" = MATERNAL_COLOR,
         "Significant imprinted: paternal" = PATERNAL_COLOR,
-        "Significant DEG" = "grey25",
-        "Imprinted but not significant" = "darkgoldenrod2",
-        "Small fold change" = "grey25",
-        "Not significant" = "lightgray"
+        "Significant DEG" = "#a2a4a2",
+        "Small fold change" = "#dcdcdb",
+        "Not significant" = "#cbcccb"
+      )
+    ) +
+    
+    scale_x_continuous(
+      limits = c(
+        -max(abs(volcano_df$log2FoldChange), na.rm = TRUE),
+        max(abs(volcano_df$log2FoldChange), na.rm = TRUE)
       )
     ) +
     
@@ -286,53 +266,53 @@ make_volcano_plot <- function(volcano_df, title_text, output_file) {
 # 7. Make volcano plots
 # ------------------------------------------------------------------
 
-volcano_plot_KO_M_vs_WT_M <- make_volcano_plot(
-  volcano_KO_M_vs_WT_M,
-  "Volcano Plot: KO Male vs WT Male",
-  "figures/Volcano_KO_M_vs_WT_M.pdf"
+volcano_DEGs_plot_KO_M_vs_WT_M <- make_volcano_plot(
+  volcano_DEGs_KO_M_vs_WT_M,
+  "Volcano Plot of DEGs: KO Male vs WT Male",
+  "figures/DEGs_Volcano_KO_M_vs_WT_M.jpg"
 )
 
-volcano_plot_HT_F_vs_WT_F <- make_volcano_plot(
-  volcano_HT_F_vs_WT_F,
-  "Volcano Plot: HT Female vs WT Female",
-  "figures/Volcano_HT_F_vs_WT_F.pdf"
+volcano_DEGs_plot_HT_F_vs_WT_F <- make_volcano_plot(
+  volcano_DEGs_HT_F_vs_WT_F,
+  "Volcano Plot of DEGs: HT Female vs WT Female",
+  "figures/DEGs_Volcano_HT_F_vs_WT_F.jpg"
 )
 
-volcano_plot_KO_M_vs_HT_F <- make_volcano_plot(
-  volcano_KO_M_vs_HT_F,
-  "Volcano Plot: KO Male vs HT Female",
-  "figures/Volcano_KO_M_vs_HT_F.pdf"
+volcano_DEGs_plot_KO_M_vs_HT_F <- make_volcano_plot(
+  volcano_DEGs_KO_M_vs_HT_F,
+  "Volcano Plot of DEGs: KO Male vs HT Female",
+  "figures/DEGs_Volcano_KO_M_vs_HT_F.jpg"
 )
 
 # ------------------------------------------------------------------
 # 8. Save significant imprinted DEG lists
 # ------------------------------------------------------------------
 
-sig_imprinted_KO_M_vs_WT_M <- volcano_KO_M_vs_WT_M %>%
+sig_imprinted_KO_M_vs_WT_M <- volcano_DEGs_KO_M_vs_WT_M %>%
   filter(Significant_Imprinted_DEG) %>%
   arrange(padj)
 
-sig_imprinted_HT_F_vs_WT_F <- volcano_HT_F_vs_WT_F %>%
+sig_imprinted_HT_F_vs_WT_F <- volcano_DEGs_HT_F_vs_WT_F %>%
   filter(Significant_Imprinted_DEG) %>%
   arrange(padj)
 
-sig_imprinted_KO_M_vs_HT_F <- volcano_KO_M_vs_HT_F %>%
+sig_imprinted_KO_M_vs_HT_F <- volcano_DEGs_KO_M_vs_HT_F %>%
   filter(Significant_Imprinted_DEG) %>%
   arrange(padj)
 
 write_csv(
   sig_imprinted_KO_M_vs_WT_M,
-  "data/processed/Sig_Imprinted_DEGs_KO_M_vs_WT_M.csv"
+  "data/processed/Significant_Imprinted_DEGs_KO_M_vs_WT_M.csv"
 )
 
 write_csv(
   sig_imprinted_HT_F_vs_WT_F,
-  "data/processed/Sig_Imprinted_DEGs_HT_F_vs_WT_F.csv"
+  "data/processed/Significant_Imprinted_DEGs_HT_F_vs_WT_F.csv"
 )
 
 write_csv(
   sig_imprinted_KO_M_vs_HT_F,
-  "data/processed/Sig_Imprinted_DEGs_KO_M_vs_HT_F.csv"
+  "data/processed/Significant_Imprinted_DEGs_KO_M_vs_HT_F.csv"
 )
 
 # ------------------------------------------------------------------
@@ -358,6 +338,24 @@ sample_metadata <- tibble(
     "KO_M", "KO_M", "KO_M"
   )
 )
+
+sample_name_map <- c(
+  "1_S245"  = "WT_F1",
+  "2_S246"  = "HT_F1",
+  "3_S247"  = "HT_F2",
+  "4_S248"  = "KO_M3",
+  "5_S249"  = "WT_M1",
+  "6_S250"  = "WT_M2",
+  "7_S251"  = "HT_F3",
+  "8_S252"  = "WT_F2",
+  "9_S253"  = "WT_F3",
+  "10_S254" = "KO_M1",
+  "11_S255" = "WT_M3",
+  "12_S256" = "KO_M2"
+)
+
+MATERNAL_ALLELE <- "129"
+PATERNAL_ALLELE <- "JF1"
 
 aer_long <- raw_counts %>%
   mutate(
@@ -434,9 +432,10 @@ make_aer_violin_plot <- function(sig_gene_df, comparison_groups, title_text, out
     plot_data,
     aes(x = Genotype, y = AER, fill = Genotype)
   ) +
-    geom_violin(
-      trim = FALSE,
-      alpha = 0.45,
+    geom_boxplot(
+      width = 0.28,
+      alpha = 0.35,
+      outlier.shape = NA,
       color = "black",
       linewidth = 0.35
     ) +
@@ -512,30 +511,27 @@ make_aer_violin_plot <- function(sig_gene_df, comparison_groups, title_text, out
 }
 
 # ------------------------------------------------------------------
-# 11. Make violin plots
+# 11. Make BOX plots
 # ------------------------------------------------------------------
 
+# ignore "violin" this is actually box plots being created
 violin_KO_M_vs_WT_M <- make_aer_violin_plot(
   sig_imprinted_KO_M_vs_WT_M,
   comparison_groups = c("WT_M", "KO_M"),
   title_text = "Imprinted Significant DEGs: KO Male vs WT Male",
-  output_file = "figures/Violin_Imprinted_DEGs_KO_M_vs_WT_M.jpg"
+  output_file = "figures/BoxPlot_Imprinted_DEGs_KO_M_vs_WT_M.jpg"
 )
 
 violin_HT_F_vs_WT_F <- make_aer_violin_plot(
   sig_imprinted_HT_F_vs_WT_F,
   comparison_groups = c("WT_F", "HT_F"),
   title_text = "Imprinted Significant DEGs: HT Female vs WT Female",
-  output_file = "figures/Violin_Imprinted_DEGs_HT_F_vs_WT_F.jpg"
+  output_file = "figures/BoxPlot_Imprinted_DEGs_HT_F_vs_WT_F.jpg"
 )
 
 violin_KO_M_vs_HT_F <- make_aer_violin_plot(
   sig_imprinted_KO_M_vs_HT_F,
   comparison_groups = c("HT_F", "KO_M"),
   title_text = "Imprinted Significant DEGs: KO Male vs HT Female",
-  output_file = "figures/Violin_Imprinted_DEGs_KO_M_vs_HT_F.jpg"
+  output_file = "figures/BoxPlot_Imprinted_DEGs_KO_M_vs_HT_F.jpg"
 )
-
-###############################################################################
-# End of script
-###############################################################################

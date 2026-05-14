@@ -91,6 +91,20 @@ count_matrix <- count_matrix[, ordered_samples]
 # 6. Run DESeq2
 # ------------------------------------------------------------------
 
+sample_metadata <- tibble(
+  Sample = ordered_samples,
+  Genotype = c(
+    "WT_M", "WT_M", "WT_M",
+    "WT_F", "WT_F", "WT_F",
+    "HT_F", "HT_F", "HT_F",
+    "KO_M", "KO_M", "KO_M"
+  )
+) %>%
+  column_to_rownames("Sample")
+
+# Check that count matrix columns and metadata rows match exactly
+all(colnames(count_matrix) == rownames(sample_metadata))
+
 dds <- DESeqDataSetFromMatrix(
   countData = count_matrix,
   colData = sample_metadata,
