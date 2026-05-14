@@ -1,0 +1,2 @@
+baseMean,log2FoldChange,lfcSE,pvalue,padj,Gene_Name,Gene_Base,Gene_clean,Gene,Expressed_Allele,Status,Overall_Expression_Pattern,Comparison,neg_log10_padj,Is_Imprinted,Is_Significant,Large_Fold_Change,Significant_DEG,Significant_Imprinted_DEG,Volcano_Color,Label
+136.6414386995363,23.831696899253732,4.180037519642543,6.292012035142788e-9,7.089084119754677e-6,Magel2_JF1,Magel2,MAGEL2,Magel2,Paternal,Imprinted,NA,HT_F_vs_WT_F,5.149409870237259,TRUE,TRUE,TRUE,TRUE,TRUE,Significant imprinted: paternal,Magel2
