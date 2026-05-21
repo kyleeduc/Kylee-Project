@@ -428,6 +428,8 @@ aer_plot_data <- aer_long %>%
     )
   )
 
+size_limits <- range(aer_plot_data$log2_total_count, na.rm = TRUE)
+
 gene_backgrounds <- aer_plot_data %>%
   group_by(Gene_Order, Gene) %>%
   summarize(
@@ -582,7 +584,8 @@ aer_dot_plot <- ggplot(
   
   scale_size_continuous(
     name = "log2(total count + 1)",
-    range = c(1.8, 5)
+    range = c(1.8, 5),
+    limits = size_limits
   ) +
   
   labs(
@@ -707,7 +710,8 @@ make_chr_plot <- function(chr) {
     ) +
     scale_size_continuous(
       name = "log2(total count + 1)",
-      range = c(1.8, 5)
+      range = c(1.8, 5),
+      limits = size_limits
     ) +
     labs(
       title = paste0("Allele-Specific Expression Bias — ", chr),

@@ -269,19 +269,19 @@ make_volcano_plot <- function(volcano_df, title_text, output_file) {
 volcano_DEGs_plot_KO_M_vs_WT_M <- make_volcano_plot(
   volcano_DEGs_KO_M_vs_WT_M,
   "Volcano Plot of DEGs: KO Male vs WT Male",
-  "figures/DEGs_Volcano_KO_M_vs_WT_M.jpg"
+  "figures/DEGs_Volcano_KO_M_vs_WT_M.pdf"
 )
 
 volcano_DEGs_plot_HT_F_vs_WT_F <- make_volcano_plot(
   volcano_DEGs_HT_F_vs_WT_F,
   "Volcano Plot of DEGs: HT Female vs WT Female",
-  "figures/DEGs_Volcano_HT_F_vs_WT_F.jpg"
+  "figures/DEGs_Volcano_HT_F_vs_WT_F.pdf"
 )
 
 volcano_DEGs_plot_KO_M_vs_HT_F <- make_volcano_plot(
   volcano_DEGs_KO_M_vs_HT_F,
   "Volcano Plot of DEGs: KO Male vs HT Female",
-  "figures/DEGs_Volcano_KO_M_vs_HT_F.jpg"
+  "figures/DEGs_Volcano_KO_M_vs_HT_F.pdf"
 )
 
 # ------------------------------------------------------------------
@@ -519,19 +519,19 @@ violin_KO_M_vs_WT_M <- make_aer_violin_plot(
   sig_imprinted_KO_M_vs_WT_M,
   comparison_groups = c("WT_M", "KO_M"),
   title_text = "Imprinted Significant DEGs: KO Male vs WT Male",
-  output_file = "figures/BoxPlot_Imprinted_DEGs_KO_M_vs_WT_M.jpg"
+  output_file = "figures/BoxPlot_Imprinted_DEGs_KO_M_vs_WT_M.pdf"
 )
 
 violin_HT_F_vs_WT_F <- make_aer_violin_plot(
   sig_imprinted_HT_F_vs_WT_F,
   comparison_groups = c("WT_F", "HT_F"),
   title_text = "Imprinted Significant DEGs: HT Female vs WT Female",
-  output_file = "figures/BoxPlot_Imprinted_DEGs_HT_F_vs_WT_F.jpg"
+  output_file = "figures/BoxPlot_Imprinted_DEGs_HT_F_vs_WT_F.pdf"
 )
 
 violin_KO_M_vs_HT_F <- make_aer_violin_plot(
   sig_imprinted_KO_M_vs_HT_F,
   comparison_groups = c("HT_F", "KO_M"),
   title_text = "Imprinted Significant DEGs: KO Male vs HT Female",
-  output_file = "figures/BoxPlot_Imprinted_DEGs_KO_M_vs_HT_F.jpg"
+  output_file = "figures/BoxPlot_Imprinted_DEGs_KO_M_vs_HT_F.pdf"
 )
