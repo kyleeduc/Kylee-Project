@@ -674,9 +674,9 @@ make_chr_plot <- function(chr) {
     ) +
     scale_shape_manual(
       values = c(
-        "WT Male" = 16,
+        "WT Male" = 15,
         "KO Male" = 17,
-        "WT Female" = 15,
+        "WT Female" = 16,
         "HT Female" = 18
       )
     ) +
